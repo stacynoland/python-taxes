@@ -22,3 +22,16 @@ from python_taxes.federal.calculators import medicare
 def test_tax_withholding(medicare_wages, expected):
     with expected as result:
         assert medicare.tax_withholding(medicare_wages) == result
+
+
+@pytest.mark.parametrize(
+    "medicare_wages, wages_ytd, self_emp, expected", [
+        (0, 0, False, pytest.raises(ValidationError)),
+        ('0.01', '0.00', True, pytest.raises(ValidationError)),
+    ]
+)
+
+
+def test_tw_full_params(medicare_wages, wages_ytd, self_emp, expected):
+    with expected as result:
+        assert medicare.tax_withholding(medicare_wages, wages_ytd, self_emp) == result
