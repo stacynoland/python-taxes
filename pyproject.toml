@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "python-taxes"
+version = "0.1.0"
+description = "Python package for United States tax data and calculations."
+authors = ["Stacy Noland <46572585+stacynoland@users.noreply.github.com>"]
+readme = "README.md"
+packages = [{include = "python_taxes", from = "src"}]
+
+[tool.poetry.dependencies]
+python = "^3.13"
+pydantic = "^2.10.4"
+
+[tool.poetry.group.dev.dependencies]
+pytest-cov = "^6.0.0"
+tox = "^4.23.2"
+mypy = "^1.14.0"
+
+[tool.pytest.ini_options]
+addopts = [
+    "--import-mode=importlib",
+]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
