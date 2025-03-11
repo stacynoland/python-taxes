@@ -35,6 +35,14 @@ def required_withholding(
     self_employed: StrictBool = False,
     round: StrictBool = False,
 ) -> Decimal:
+    """Required amount to withhold regardless of filing status
+
+    Parameters:
+    medicare_wages -- Earned this period
+    medicare_wages_ytd -- Earned this year
+    self_employed -- Person/employee is self-employed (default False)
+    round -- Round response to nearest whole dollar amount (default False)
+    """
 
     if not medicare_wages_ytd:
         medicare_wages_ytd = 0
@@ -52,12 +60,20 @@ def required_withholding(
 
 
 @validate_call
-def additiona_withholding(
+def additional_withholding(
     medicare_wages_ytd: Annotated[Decimal, Field(ge=Decimal("0.01"), decimal_places=2)],
     self_employed: StrictBool = False,
     status: Optional[Literal['single', 'married', 'separate' 'hoh']] = 'single',
     round: StrictBool = False,
-):
+) -> Decimal:
+    """Additional withholding based on status
+
+    Parameters:
+    medicare_wages_ytd -- Earned this year
+    self_employed -- Person/employee is self-employed (default False)
+    status -- Filing status of person (default 'single')
+    round -- Round response to nearest whole dollar amount (default False)
+    """
 
     if self_employed:
         tax_rate = SELF_EMPLOYED_PERCENT
