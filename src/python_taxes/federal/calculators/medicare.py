@@ -56,7 +56,7 @@ def required_withholding(
             or (medicare_wages_ytd + medicare_wages) > DEFAULT_THRESHOLD):
         tax_rate = tax_rate + ADDITIONAL_PERCENT
 
-    return (medicare_wages * tax_rate).quantize(rounding=rounding[round])
+    return (medicare_wages * tax_rate).quantize(rounding[round])
 
 
 @validate_call
@@ -90,4 +90,4 @@ def additional_withholding(
     else:
         med_taxes = medicare_wages_ytd * tax_rate
 
-    return med_taxes.quantize(rounding=rounding[round])
+    return med_taxes.quantize(rounding[round])
