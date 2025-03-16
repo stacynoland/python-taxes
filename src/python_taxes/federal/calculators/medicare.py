@@ -3,7 +3,7 @@ from typing import Annotated, Literal, Optional
 
 from pydantic import Field, StrictBool, validate_call
 
-from . import NOT_ROUNDED, ROUNDED
+from . import rounding
 
 
 STANDARD_PERCENT = Decimal("1.45") / 100
@@ -13,11 +13,6 @@ SELF_EMPLOYED_PERCENT = Decimal("2.9") / 100
 ADDITIONAL_PERCENT = Decimal("0.9") / 100
 
 DEFAULT_THRESHOLD = Decimal("200000")
-
-rounding = {
-    True: ROUNDED,
-    False: NOT_ROUNDED,
-}
 
 status_threshold = {
     'single': DEFAULT_THRESHOLD,
