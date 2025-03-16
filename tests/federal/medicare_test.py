@@ -18,7 +18,7 @@ from python_taxes.federal.calculators import medicare
 class TestForZero:
     def test_required_withholding_zero(self, wages, expected):
         with expected as e:
-            assert (medicare.required_withholding(wages) == e)
+            assert (medicare.withholding(wages) == e)
 
     def test_additional_withholding_zero(self, wages, expected):
         with expected as e:
@@ -36,7 +36,7 @@ def test_required_withholding_zero_all_params(
     wages, wages_ytd, self_emp, expected):
         with expected as e:
             assert (
-                medicare.required_withholding(wages, wages_ytd, self_emp) == e
+                medicare.withholding(wages, wages_ytd, self_emp) == e
             )
 
 
@@ -63,7 +63,7 @@ def test_additional_withholding_zero_all_params(wages_ytd, self_emp, expected):
 class TestForNegatives:
     def test_required_withholding_negative(self, wages, expected):
         with expected as e:
-            assert (medicare.required_withholding(wages) == e)
+            assert (medicare.withholding(wages) == e)
 
     def test_additional_withholding_negative(self, wages, expected):
         with expected as e:
@@ -84,7 +84,7 @@ class TestForNegatives:
 def test_required_withholding_not_rounded(
     wages, wages_ytd, self_emp, round, expected):
         assert (
-            medicare.required_withholding(wages, wages_ytd, self_emp, round) == expected
+            medicare.withholding(wages, wages_ytd, self_emp, round) == expected
         )
 
 # Rounded Tests
@@ -101,5 +101,5 @@ def test_required_withholding_not_rounded(
 def test_required_withholding_rounded(
     wages, wages_ytd, self_emp, round, expected):
         assert (
-            medicare.required_withholding(wages, wages_ytd, self_emp, round) == expected
+            medicare.withholding(wages, wages_ytd, self_emp, round) == expected
         )

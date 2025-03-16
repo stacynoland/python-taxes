@@ -23,6 +23,7 @@ def withholding(
     self_employed -- Person/employee is self-employed (default False)
     round -- Round response to nearest whole dollar amount (default False)
     """
+
     if self_employed:
         tax_rate = SELF_EMPLOYED_TAX
     else:
