@@ -26,17 +26,17 @@ class TestForZero:
 
 
 @pytest.mark.parametrize(
-    "wages, wages_ytd, self_emp, expected",
+    "wages, wages_ytd, self_emp, rounded, expected",
     [
-        (0, 0, False, pytest.raises(ValidationError)),
-        ("0.01", "0.00", True, pytest.raises(ValidationError)),
+        (0, 0, False, True, pytest.raises(ValidationError)),
+        ("0.01", "0.00", True, False, pytest.raises(ValidationError)),
     ],
 )
 def test_required_withholding_zero_all_params(
-    wages, wages_ytd, self_emp, expected):
+    wages, wages_ytd, self_emp, rounded, expected):
         with expected as e:
             assert (
-                medicare.withholding(wages, wages_ytd, self_emp) == e
+                medicare.withholding(wages, wages_ytd, self_emp, rounded) == e
             )
 
 

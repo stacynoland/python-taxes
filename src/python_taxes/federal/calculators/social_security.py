@@ -14,7 +14,7 @@ SELF_EMPLOYED_TAX = Decimal('12.400') / 100
 def withholding(
     taxable_wages: Annotated[Decimal, Field(ge=0.01, decimal_places=2)],
     self_employed: StrictBool = False,
-    round: StrictBool = False,
+    rounded: StrictBool = False,
 ) -> Decimal:
     """Social security tax withholding.
 
@@ -29,4 +29,4 @@ def withholding(
     else:
         tax_rate = STANDARD_TAX
 
-    return (taxable_wages * tax_rate).quantize(rounding[round])
+    return (taxable_wages * tax_rate).quantize(rounding[rounded])

@@ -28,7 +28,7 @@ def withholding(
     taxable_wages_ytd: Optional[
         Annotated[Decimal, Field(ge=Decimal("0.01"), decimal_places=2)]] = None,
     self_employed: StrictBool = False,
-    round: StrictBool = False,
+    rounded: StrictBool = False,
 ) -> Decimal:
     """Required amount to withhold regardless of filing status
 
@@ -51,7 +51,7 @@ def withholding(
             or (taxable_wages_ytd + taxable_wages) > DEFAULT_THRESHOLD):
         tax_rate = tax_rate + ADDITIONAL_PERCENT
 
-    return (taxable_wages * tax_rate).quantize(rounding[round])
+    return (taxable_wages * tax_rate).quantize(rounding[rounded])
 
 
 @validate_call
@@ -59,7 +59,7 @@ def additional_withholding(
     taxable_wages_ytd: Annotated[Decimal, Field(ge=Decimal("0.01"), decimal_places=2)],
     self_employed: StrictBool = False,
     status: Optional[Literal['single', 'married', 'separate' 'hoh']] = 'single',
-    round: StrictBool = False,
+    rounded: StrictBool = False,
 ) -> Decimal:
     """Additional withholding based on status
 
@@ -85,4 +85,4 @@ def additional_withholding(
     else:
         med_taxes = taxable_wages_ytd * tax_rate
 
-    return med_taxes.quantize(rounding[round])
+    return med_taxes.quantize(rounding[rounded])
