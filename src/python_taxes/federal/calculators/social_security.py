@@ -12,16 +12,17 @@ SELF_EMPLOYED_TAX = Decimal('12.400') / 100
 
 @validate_call
 def withholding(
-    taxable_wages: Annotated[Decimal, Field(ge=0.01, decimal_places=2)],
+    taxable_wages: Annotated[Decimal, Field(ge=Decimal("0.01"), decimal_places=2)],
     self_employed: StrictBool = False,
     rounded: StrictBool = False,
 ) -> Decimal:
-    """Social security tax withholding.
+    """
+    Social security tax withholding.
 
     Parameters:
-    taxable_wages -- Total wages to be taxed
-    self_employed -- Person/employee is self-employed (default False)
-    round -- Round response to nearest whole dollar amount (default False)
+    taxable_wages -- Wages to be taxed
+    self_employed -- True if self-employed (default False)
+    round -- Round to nearest whole dollar amount (default False)
     """
 
     if self_employed:

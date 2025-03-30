@@ -34,8 +34,8 @@ def required_withholding(
     Required amount to withhold regardless of filing status
 
     Parameters:
-    taxable_wages -- Earned this period
-    taxable_wages_ytd -- Earned this year
+    taxable_wages -- Wages earned this period
+    taxable_wages_ytd -- Wages earned this year
     self_employed -- True if self-employed (default False)
     round -- Round to nearest whole dollar amount (default False)
     """
@@ -66,7 +66,7 @@ def additional_withholding(
     Additional withholding based on status
 
     Parameters:
-    taxable_wages_ytd -- Earned this year
+    taxable_wages_ytd -- Wages earned this year
     status -- Filing status (default 'single')
     self_employed -- True if self-employed (default False)
     round -- Round to nearest whole dollar amount (default False)
