@@ -23,20 +23,21 @@ status_threshold = {
 
 
 @validate_call
-def withholding(
+def required_withholding(
     taxable_wages: Annotated[Decimal, Field(ge=Decimal("0.01"), decimal_places=2)],
     taxable_wages_ytd: Optional[
-        Annotated[Decimal, Field(ge=Decimal("0.01"), decimal_places=2)]] = None,
+        Annotated[Decimal, Field(ge=Decimal("0.01"), decimal_places=2)]],
     self_employed: StrictBool = False,
     rounded: StrictBool = False,
 ) -> Decimal:
-    """Required amount to withhold regardless of filing status
+    """
+    Required amount to withhold regardless of filing status
 
     Parameters:
     taxable_wages -- Earned this period
     taxable_wages_ytd -- Earned this year
-    self_employed -- Person/employee is self-employed (default False)
-    round -- Round response to nearest whole dollar amount (default False)
+    self_employed -- True if self-employed (default False)
+    round -- Round to nearest whole dollar amount (default False)
     """
 
     if not taxable_wages_ytd:
@@ -57,17 +58,18 @@ def withholding(
 @validate_call
 def additional_withholding(
     taxable_wages_ytd: Annotated[Decimal, Field(ge=Decimal("0.01"), decimal_places=2)],
+    status: Optional[Literal['single', 'married', 'separate', 'hoh']] = 'single',
     self_employed: StrictBool = False,
-    status: Optional[Literal['single', 'married', 'separate' 'hoh']] = 'single',
     rounded: StrictBool = False,
 ) -> Decimal:
-    """Additional withholding based on status
+    """
+    Additional withholding based on status
 
     Parameters:
     taxable_wages_ytd -- Earned this year
-    self_employed -- Person/employee is self-employed (default False)
-    status -- Filing status of person (default 'single')
-    round -- Round response to nearest whole dollar amount (default False)
+    status -- Filing status (default 'single')
+    self_employed -- True if self-employed (default False)
+    round -- Round to nearest whole dollar amount (default False)
     """
 
     if self_employed:
