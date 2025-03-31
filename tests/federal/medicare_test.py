@@ -3,7 +3,7 @@ from decimal import Decimal
 from pydantic import ValidationError
 import pytest
 
-from python_taxes.federal.calculators import medicare
+from python_taxes.federal import medicare
 
 
 # Zero ($0) Tests

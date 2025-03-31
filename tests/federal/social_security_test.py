@@ -3,7 +3,7 @@ from decimal import Decimal
 from pydantic import ValidationError
 import pytest
 
-from python_taxes.federal.calculators import social_security
+from python_taxes.federal import social_security
 
 
 # Zero ($0) Tests
