@@ -1,5 +1,5 @@
 from decimal import Decimal
-from typing import Annotated, Literal, Optional
+from typing import Annotated, Optional
 
 from pydantic import Field, StrictBool, validate_call
 
@@ -13,8 +13,8 @@ SELF_EMPLOYED_TAX = Decimal('12.400') / 100
 @validate_call
 def withholding(
     taxable_wages: Annotated[Decimal, Field(ge=Decimal("0.01"), decimal_places=2)],
-    self_employed: StrictBool = False,
-    rounded: StrictBool = False,
+    self_employed: Optional[StrictBool] = False,
+    rounded: Optional[StrictBool] = False,
 ) -> Decimal:
     """
     Social security tax withholding.
