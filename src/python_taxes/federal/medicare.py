@@ -25,10 +25,10 @@ status_threshold = {
 @validate_call
 def required_withholding(
     taxable_wages: Annotated[Decimal, Field(ge=Decimal("0.01"), decimal_places=2)],
-    taxable_wages_ytd: Optional[
-        Annotated[Decimal, Field(ge=Decimal("0.01"), decimal_places=2)]],
-    self_employed: StrictBool = False,
-    rounded: StrictBool = False,
+    taxable_wages_ytd: Optional[Annotated[
+        Decimal, Field(ge=Decimal("0.01"), decimal_places=2)]] = Decimal("0.00"),
+    self_employed: Optional[StrictBool] = False,
+    rounded: Optional[StrictBool] = False,
 ) -> Decimal:
     """
     Required amount to withhold regardless of filing status
@@ -59,8 +59,8 @@ def required_withholding(
 def additional_withholding(
     taxable_wages_ytd: Annotated[Decimal, Field(ge=Decimal("0.01"), decimal_places=2)],
     status: Optional[Literal['single', 'married', 'separate', 'hoh']] = 'single',
-    self_employed: StrictBool = False,
-    rounded: StrictBool = False,
+    self_employed: Optional[StrictBool] = False,
+    rounded: Optional[StrictBool] = False,
 ) -> Decimal:
     """
     Additional withholding based on status
