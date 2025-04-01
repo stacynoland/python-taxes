@@ -37,7 +37,7 @@ def required_withholding(
     taxable_wages -- Wages earned this period
     taxable_wages_ytd -- Wages earned this year
     self_employed -- True if self-employed (default False)
-    round -- Round to nearest whole dollar amount (default False)
+    rounded -- Round to nearest whole dollar amount (default False)
     """
 
     if not taxable_wages_ytd:
@@ -58,7 +58,7 @@ def required_withholding(
 @validate_call
 def additional_withholding(
     taxable_wages_ytd: Annotated[Decimal, Field(ge=Decimal("0.01"), decimal_places=2)],
-    status: Optional[Literal['single', 'married', 'separate', 'hoh']] = 'single',
+    filing_status: Optional[Literal['single', 'married', 'separate', 'hoh']] = 'single',
     self_employed: Optional[StrictBool] = False,
     rounded: Optional[StrictBool] = False,
 ) -> Decimal:
@@ -69,7 +69,7 @@ def additional_withholding(
     taxable_wages_ytd -- Wages earned this year
     status -- Filing status (default 'single')
     self_employed -- True if self-employed (default False)
-    round -- Round to nearest whole dollar amount (default False)
+    rounded -- Round to nearest whole dollar amount (default False)
     """
 
     if self_employed:
@@ -77,7 +77,7 @@ def additional_withholding(
     else:
         tax_rate = STANDARD_PERCENT
 
-    threshold = status_threshold[status]
+    threshold = status_threshold[filing_status]
 
     if taxable_wages_ytd > threshold:
         wages_over_threshold = taxable_wages_ytd - threshold
