@@ -22,7 +22,7 @@ def withholding(
     Parameters:
     taxable_wages -- Wages to be taxed
     self_employed -- True if self-employed (default False)
-    round -- Round to nearest whole dollar amount (default False)
+    rounded -- Round to nearest whole dollar amount (default False)
     """
 
     if self_employed:
