@@ -30,8 +30,7 @@ def required_withholding(
     self_employed: Optional[StrictBool] = False,
     rounded: Optional[StrictBool] = False,
 ) -> Decimal:
-    """
-    Required amount to withhold regardless of filing status
+    """Calculate required amount to withhold regardless of filing status.
 
     Parameters:
     taxable_wages -- Wages earned this period
@@ -62,8 +61,7 @@ def additional_withholding(
     self_employed: Optional[StrictBool] = False,
     rounded: Optional[StrictBool] = False,
 ) -> Decimal:
-    """
-    Additional withholding based on status
+    """Calculate withholding based on status.
 
     Parameters:
     taxable_wages_ytd -- Wages earned this year
