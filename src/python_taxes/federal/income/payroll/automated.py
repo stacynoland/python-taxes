@@ -34,6 +34,23 @@ def employer_withholding(
     tax_year: Optional[Union[int, str]] = CURRENT_TAX_YEAR,
     rounded: Optional[StrictBool] = False,
 ) -> Decimal:
+    """Calculate income tax withholding.
+
+    Formula used if Form W-4 is 2020 or later.
+    If W-4 is 2019 or earlier, use employer_withholding_pre_2020 instead.
+
+    Parameters:
+    taxable_wages -- Wages earned this year
+    pay_frequency -- Number of pay periods per year
+    filing_status -- Filing status (default 'single')
+    multiple_jobs -- Indicates if box in Step 2 on W-4 is checked
+    tax_credits -- Dependant claims and other credits from Step 3 on W-4
+    other_income -- Income not from jobs - Step 4 on W-4
+    deductions -- If claiming deductions other than standard - Step 4 on W-4
+    extra_withholding -- Extra amount to withhold each pay period - Step 4 on W-4
+    tax_year -- Year for which you are filing (default CURRENT_TAX_YEAR)
+    rounded -- Round to nearest whole dollar amount (default False)
+    """
 
     # Steps 1a-1i
     match filing_status:
@@ -58,9 +75,9 @@ def employer_withholding(
     adjusted_wage = ((taxable_wages * pay_freq) + other_income) - deductions
 
     # Step 2
-    for rate_row in withholding_schedule[tax_year]:
-        if adjusted_wage >= rate_row.min and adjusted_wage < rate_row.max:
-            withholding_rate = rate_row
+    for row in withholding_schedule[tax_year]:
+        if adjusted_wage >= row.min and adjusted_wage < row.max:
+            withholding_rate = row
             break
 
     tax_withholding = (
@@ -93,6 +110,17 @@ def employer_withholding_pre_2020(
     tax_year: Optional[Union[int, str]] = CURRENT_TAX_YEAR,
     rounded: Optional[StrictBool] = False,
 ) -> Decimal:
+    """Calculate income tax withholding if Form W-4 is 2019 or earlier.
+
+    Parameters:
+    taxable_wages -- Wages earned this year
+    pay_frequency -- Number of pay periods per year
+    marital_status -- Marital status (default 'single')
+    allowances_claimed -- Number of allowances claimed in Step 5 on W-4
+    extra_withholding -- Extra amount to withhold each pay period - Step 6 on W-4
+    tax_year -- Year for which you are filing (default CURRENT_TAX_YEAR)
+    rounded -- Round to nearest whole dollar amount (default False)
+    """
 
     # Steps 1a-1c and 1j-1l
     match marital_status:
@@ -121,6 +149,8 @@ def employer_withholding_pre_2020(
 
     withheld_this_period = tax_withholding / pay_freq
 
+    # Step 3 skipped if W4 is from 2019 or earlier
+    # Step 4
     if extra_withholding:
         withheld_this_period = withheld_this_period + extra_withholding
 
