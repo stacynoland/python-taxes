@@ -67,7 +67,7 @@ def additional_withholding(
 
     Parameters:
     taxable_wages_ytd -- Wages earned this year
-    status -- Filing status (default 'single')
+    filing_status -- Filing status (default 'single')
     self_employed -- True if self-employed (default False)
     rounded -- Round to nearest whole dollar amount (default False)
     """
