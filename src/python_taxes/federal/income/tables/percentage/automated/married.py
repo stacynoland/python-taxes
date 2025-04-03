@@ -33,7 +33,7 @@ standard_schedule = {
         RateRow(min=Decimal("411700.00"), max=Decimal("518149.9"), withhold_amount=Decimal("80398.00"), percent=32),
         RateRow(min=Decimal("518150.00"), max=Decimal('768699.99'), withhold_amount=Decimal("114462.00"), percent=35),
         RateRow(min=Decimal("768700.00"), max=MAX, withhold_amount=Decimal("202154.50"), percent=37),
-    ]
+    ],
 }
 
 multiple_jobs = {
@@ -66,5 +66,5 @@ multiple_jobs = {
         RateRow(min=Decimal("212300.00"), max=Decimal("265524.99"), withhold_amount=Decimal("40199.00"), percent=32),
         RateRow(min=Decimal("265525.00"), max=Decimal("390799.99"), withhold_amount=Decimal("57231.00"), percent=35),
         RateRow(min=Decimal("390800.00"), max=MAX, withhold_amount=Decimal("101077.25"), percent=37),
-    ]
+    ],
 }
