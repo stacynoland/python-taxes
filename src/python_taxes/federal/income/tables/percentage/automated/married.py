@@ -65,6 +65,6 @@ multiple_jobs = {
         RateRow(min=Decimal("118350.00"), max=Decimal("212299.99"), withhold_amount=Decimal("17651.00"), percent=24),
         RateRow(min=Decimal("212300.00"), max=Decimal("265524.99"), withhold_amount=Decimal("40199.00"), percent=32),
         RateRow(min=Decimal("265525.00"), max=Decimal("390799.99"), withhold_amount=Decimal("57231.00"), percent=35),
-        RateRow(min=Decimal("390800.00"), max=MAX, withhold_amount=Decimal("101077.25"), percentage=37),
+        RateRow(min=Decimal("390800.00"), max=MAX, withhold_amount=Decimal("101077.25"), percent=37),
     ]
 }

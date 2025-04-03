@@ -55,7 +55,7 @@ multiple_jobs = {
         RateRow(min=Decimal("57563.00"), max=Decimal("103274.99"), withhold_amount=Decimal("8584.25"), percent=24),
         RateRow(min=Decimal("103275.00"), max=Decimal("129162.99"), withhold_amount=Decimal("19555.25"), percent=32),
         RateRow(min=Decimal("129163.00"), max=Decimal("311974.99"), withhold_amount=Decimal("27839.25"), percent=35),
-        RateRow(min=Decimal("311975.00"), max=MAX, withhold_amount=Decimal("91823.63"), percentage=37),
+        RateRow(min=Decimal("311975.00"), max=MAX, withhold_amount=Decimal("91823.63"), percent=37),
     ],
     2025: [
         RateRow(min=Decimal("0.00"), max=Decimal("7499.99"), withhold_amount=Decimal("0.00"), percent=0),
@@ -65,6 +65,6 @@ multiple_jobs = {
         RateRow(min=Decimal("59175.00"), max=Decimal("106149.99"), withhold_amount=Decimal("8825.50"), percent=24),
         RateRow(min=Decimal("106150.00"), max=Decimal("132762.99"), withhold_amount=Decimal("20099.50"), percent=32),
         RateRow(min=Decimal("132763.00"), max=Decimal("320674.99"), withhold_amount=Decimal("28615.50"), percent=35),
-        RateRow(min=Decimal("320675.00"), max=MAX, withhold_amount=Decimal("94384.88"), percentage=37),
+        RateRow(min=Decimal("320675.00"), max=MAX, withhold_amount=Decimal("94384.88"), percent=37),
     ]
 }
