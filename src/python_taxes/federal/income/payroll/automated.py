@@ -23,9 +23,11 @@ CURRENT_TAX_YEAR = 2024
 @validate_call
 def employer_withholding(
     taxable_wages: Annotated[Decimal, Field(ge=Decimal("0.01"), decimal_places=2)],
-    pay_frequency: Literal['Semiannual', 'Quarterly', 'Monthly', 'Semimonthly',
-                           'Biweekly', 'Weekly', 'Daily'] = 'Biweekly',
-    filing_status: Literal['single', 'married', 'separate', 'hoh'] = 'single',
+    pay_frequency: Optional[Literal['Semiannual', 'Quarterly', 'Monthly',
+                                    'Semimonthly', 'Biweekly', 'Weekly',
+                                    'Daily']] = 'Biweekly',
+    filing_status: Optional[Literal['single', 'married',
+                                    'separate', 'hoh']] = 'single',
     multiple_jobs: Optional[StrictBool] = False,
     tax_credits: Optional[Decimal] = Decimal("0.00"),
     other_income: Optional[Decimal] = Decimal("0.00"),
@@ -102,8 +104,9 @@ def employer_withholding(
 @validate_call
 def employer_withholding_pre_2020(
     taxable_wages: Annotated[Decimal, Field(ge=Decimal("0.01"), decimal_places=2)],
-    pay_frequency: Literal['Semiannual', 'Quarterly', 'Monthly', 'Semimonthly',
-                           'Biweekly', 'Weekly', 'Daily'] = 'Biweekly',
+    pay_frequency: Optional[Literal['Semiannual', 'Quarterly', 'Monthly',
+                                    'Semimonthly', 'Biweekly', 'Weekly',
+                                    'Daily']] = 'Biweekly',
     marital_status: Literal['single', 'married', 'separate'] = 'single',
     allowances_claimed: int = 0,
     extra_withholding: Optional[Decimal] = Decimal("0.00"),
