@@ -3,7 +3,7 @@ from typing import Annotated, Literal, Optional
 
 from pydantic import Field, StrictBool, validate_call
 
-from . import rounding
+from python_taxes.federal import rounding
 
 
 STANDARD_PERCENT = Decimal("1.45") / 100
