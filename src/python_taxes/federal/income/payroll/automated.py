@@ -3,6 +3,7 @@ from typing import Annotated, Literal, Optional, Union
 
 from pydantic import Field, StrictBool, validate_call
 
+from python_taxes import CURRENT_TAX_YEAR
 from python_taxes.federal import rounding
 from ..tables.percentage.automated import single, married, hoh
 
@@ -16,8 +17,6 @@ PAY_FREQUENCY = {
     'Weekly': 52,
     'Daily': 260,
 }
-
-CURRENT_TAX_YEAR = 2024
 
 
 @validate_call
