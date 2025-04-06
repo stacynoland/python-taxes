@@ -15,10 +15,10 @@ ADDITIONAL_PERCENT = Decimal("0.9") / 100
 DEFAULT_THRESHOLD = Decimal("200000")
 
 status_threshold = {
-    "Single": DEFAULT_THRESHOLD,
-    "Married": Decimal("250000"),
-    "Separate": Decimal("125000"),
-    "Hoh": DEFAULT_THRESHOLD,
+    "single": DEFAULT_THRESHOLD,
+    "married": Decimal("250000"),
+    "separate": Decimal("125000"),
+    "hoh": DEFAULT_THRESHOLD,
 }
 
 
@@ -55,7 +55,7 @@ def required_withholding(
 @validate_call
 def additional_withholding(
     taxable_wages_ytd: Annotated[Decimal, currency_field],
-    filing_status: Literal["Single", "Married", "Separate", "Hoh"] = "Single",
+    filing_status: Literal["single", "married", "separate", "hoh"] = "single",
     self_employed: StrictBool = False,
     rounded: StrictBool = False,
 ) -> Decimal:
