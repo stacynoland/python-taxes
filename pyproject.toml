@@ -21,6 +21,7 @@ flake8 = "^7.2.0"
 mypy = "^1.15.0"
 tox = "^4.25.0"
 black = "^25.1.0"
+isort = "^6.0.1"
 
 [tool.tox]
 requires = ["tox>=4.0.0"]
@@ -34,6 +35,9 @@ commands = [["pytest"]]
 description = "Run type checking on code base"
 deps = ["mypy"]
 commands = ["mypy", "src{/}python_taxes"]
+
+[tool.isort]
+profile = "black"
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
