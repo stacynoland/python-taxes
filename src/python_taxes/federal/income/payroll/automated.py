@@ -1,39 +1,44 @@
 from decimal import Decimal
-from typing import Annotated, Literal, Optional, Union
+from typing import Annotated, Literal, Union
 
-from pydantic import Field, StrictBool, validate_call
+from pydantic import StrictBool, validate_call
 
-from python_taxes import CURRENT_TAX_YEAR
+from python_taxes import CURRENT_TAX_YEAR, currency_field
 from python_taxes.federal import rounding
-from ..tables.percentage.automated import single, married, hoh
 
+from ..tables.percentage.automated import hoh, married, single
 
 PAY_FREQUENCY = {
-    'Semiannual': 2,
-    'Quarterly': 4,
-    'Monthly': 12,
-    'Semimonthly': 24,
-    'Biweekly': 26,
-    'Weekly': 52,
-    'Daily': 260,
+    "semiannual": 2,
+    "quarterly": 4,
+    "monthly": 12,
+    "semimonthly": 24,
+    "biweekly": 26,
+    "weekly": 52,
+    "daily": 260,
 }
 
 
 @validate_call
 def employer_withholding(
-    taxable_wages: Annotated[Decimal, Field(ge=Decimal("0.01"), decimal_places=2)],
-    pay_frequency: Optional[Literal['Semiannual', 'Quarterly', 'Monthly',
-                                    'Semimonthly', 'Biweekly', 'Weekly',
-                                    'Daily']] = 'Biweekly',
-    filing_status: Optional[Literal['single', 'married',
-                                    'separate', 'hoh']] = 'single',
-    multiple_jobs: Optional[StrictBool] = False,
-    tax_credits: Optional[Decimal] = Decimal("0.00"),
-    other_income: Optional[Decimal] = Decimal("0.00"),
-    deductions: Optional[Decimal] = Decimal("0.00"),
-    extra_withholding: Optional[Decimal] = Decimal("0.00"),
-    tax_year: Optional[Union[int, str]] = CURRENT_TAX_YEAR,
-    rounded: Optional[StrictBool] = False,
+    taxable_wages: Annotated[Decimal, currency_field],
+    pay_frequency: Literal[
+        "semiannual",
+        "quarterly",
+        "monthly",
+        "semimonthly",
+        "biweekly",
+        "weekly",
+        "daily",
+    ] = "biweekly",
+    filing_status: Literal["single", "married", "separate", "hoh"] = "single",
+    multiple_jobs: StrictBool = False,
+    tax_credits: Annotated[Decimal, currency_field] = Decimal("0.00"),
+    other_income: Annotated[Decimal, currency_field] = Decimal("0.00"),
+    deductions: Annotated[Decimal, currency_field] = Decimal("0.00"),
+    extra_withholding: Annotated[Decimal, currency_field] = Decimal("0.00"),
+    tax_year: Union[int, str] = CURRENT_TAX_YEAR,
+    rounded: StrictBool = False,
 ) -> Decimal:
     """Calculate income tax withholding.
 
@@ -42,32 +47,32 @@ def employer_withholding(
 
     Parameters:
     taxable_wages -- Wages earned this year
-    pay_frequency -- Number of pay periods per year
+    pay_frequency -- Number of pay periods per year (default 'biweekly')
     filing_status -- Filing status (default 'single')
-    multiple_jobs -- Indicates if box in Step 2 on W-4 is checked
-    tax_credits -- Dependant claims and other credits from Step 3 on W-4
-    other_income -- Income not from jobs - Step 4 on W-4
-    deductions -- If claiming deductions other than standard - Step 4 on W-4
-    extra_withholding -- Extra amount to withhold each pay period - Step 4 on W-4
+    multiple_jobs -- Indicates if box in Step 2 on W-4 is checked (default False)
+    tax_credits -- Dependant claims and other credits from Step 3 (default 0)
+    other_income -- Income not from jobs - Step 4 (default 0)
+    deductions -- If claiming deductions other than standard - Step 4 (default 0)
+    extra_withholding -- Extra amount to withhold each pay period - Step 4 (default 0)
     tax_year -- Year for which you are filing (default CURRENT_TAX_YEAR)
     rounded -- Round to nearest whole dollar amount (default False)
     """
 
     # Steps 1a-1i
     match filing_status:
-        case 'single' | 'separate' if multiple_jobs:
+        case "single" | "separate" if multiple_jobs:
             withholding_schedule = single.multiple_jobs
-        case 'single' | 'separate':
+        case "single" | "separate":
             withholding_schedule = single.standard_schedule
             deductions = deductions + Decimal("8600.00")
-        case 'married' if multiple_jobs:
+        case "married" if multiple_jobs:
             withholding_schedule = married.multiple_jobs
-        case 'married':
+        case "married":
             withholding_schedule = married.standard_schedule
             deductions = deductions + Decimal("12900.00")
-        case 'hoh' if multiple_jobs:
+        case "hoh" if multiple_jobs:
             withholding_schedule = hoh.multiple_jobs
-        case 'hoh':
+        case "hoh":
             withholding_schedule = hoh.standard_schedule
             deductions = deductions + Decimal("8600.00")
 
@@ -76,16 +81,14 @@ def employer_withholding(
     adjusted_wage = ((taxable_wages * pay_freq) + other_income) - deductions
 
     # Step 2
-    for row in withholding_schedule[tax_year]:
+    for row in withholding_schedule[int(tax_year)]:
         if adjusted_wage >= row.min and adjusted_wage < row.max:
             withholding_rate = row
             break
 
     tax_withholding = (
-        (adjusted_wage - withholding_rate.min)
-        * withholding_rate.percent
-        + withholding_rate.withhold_amount
-    )
+        adjusted_wage - withholding_rate.min
+    ) * withholding_rate.percent + withholding_rate.withhold_amount
 
     withheld_this_period = tax_withholding / pay_freq
 
@@ -102,33 +105,39 @@ def employer_withholding(
 
 @validate_call
 def employer_withholding_pre_2020(
-    taxable_wages: Annotated[Decimal, Field(ge=Decimal("0.01"), decimal_places=2)],
-    pay_frequency: Optional[Literal['Semiannual', 'Quarterly', 'Monthly',
-                                    'Semimonthly', 'Biweekly', 'Weekly',
-                                    'Daily']] = 'Biweekly',
-    marital_status: Literal['single', 'married', 'separate'] = 'single',
+    taxable_wages: Annotated[Decimal, currency_field],
+    pay_frequency: Literal[
+        "semiannual",
+        "quarterly",
+        "monthly",
+        "semimonthly",
+        "biweekly",
+        "weekly",
+        "daily",
+    ] = "biweekly",
+    marital_status: Literal["single", "married", "separate"] = "single",
     allowances_claimed: int = 0,
-    extra_withholding: Optional[Decimal] = Decimal("0.00"),
-    tax_year: Optional[Union[int, str]] = CURRENT_TAX_YEAR,
-    rounded: Optional[StrictBool] = False,
+    extra_withholding: Annotated[Decimal, currency_field] = Decimal("0.00"),
+    tax_year: Union[int, str] = CURRENT_TAX_YEAR,
+    rounded: StrictBool = False,
 ) -> Decimal:
-    """Calculate income tax withholding if Form W-4 is 2019 or earlier.
+    """Calculate income tax withholding - only if Form W-4 is 2019 or earlier.
 
     Parameters:
     taxable_wages -- Wages earned this year
-    pay_frequency -- Number of pay periods per year
+    pay_frequency -- Number of pay periods per year (default 'biweekly')
     marital_status -- Marital status (default 'single')
-    allowances_claimed -- Number of allowances claimed in Step 5 on W-4
-    extra_withholding -- Extra amount to withhold each pay period - Step 6 on W-4
+    allowances_claimed -- Number of allowances claimed - Step 5 (default 0)
+    extra_withholding -- Extra amount to withhold each pay period - Step 6 (default 0)
     tax_year -- Year for which you are filing (default CURRENT_TAX_YEAR)
     rounded -- Round to nearest whole dollar amount (default False)
     """
 
     # Steps 1a-1c and 1j-1l
     match marital_status:
-        case 'single' | 'separate':
+        case "single" | "separate":
             withholding_schedule = single.standard_schedule
-        case 'married':
+        case "married":
             withholding_schedule = married.standard_schedule
 
     pay_freq = PAY_FREQUENCY[pay_frequency]
@@ -138,16 +147,14 @@ def employer_withholding_pre_2020(
     adjusted_wage = (taxable_wages * pay_freq) - allowances
 
     # Step 2
-    for rate_row in withholding_schedule[tax_year]:
-        if adjusted_wage >= rate_row.min and adjusted_wage < rate_row.max:
-            withholding_rate = rate_row
+    for row in withholding_schedule[int(tax_year)]:
+        if adjusted_wage >= row.min and adjusted_wage < row.max:
+            withholding_rate = row
             break
 
     tax_withholding = (
-        (adjusted_wage - withholding_rate.min)
-        * withholding_rate.percent
-        + withholding_rate.withhold_amount
-    )
+        adjusted_wage - withholding_rate.min
+    ) * withholding_rate.percent + withholding_rate.withhold_amount
 
     withheld_this_period = tax_withholding / pay_freq
 
