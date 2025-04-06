@@ -14,13 +14,25 @@ dependencies = [
 [tool.poetry]
 packages = [{include = "python_taxes", from = "src"}]
 
-
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"
 pytest-cov = "^6.1.0"
 flake8 = "^7.2.0"
 mypy = "^1.15.0"
 tox = "^4.25.0"
+
+[tool.tox]
+requires = ["tox>=4.0.0"]
+env_list = ["3.13", "3.12", "typecheck"]
+
+[tool.tox.env_run_base]
+description = "Run tests under {base_python}"
+commands = [["pytest"]]
+
+[tool.tox.env.typecheck]
+description = "Run type checking on code base"
+deps = ["mypy"]
+commands = ["mypy", "src{/}python_taxes"]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
