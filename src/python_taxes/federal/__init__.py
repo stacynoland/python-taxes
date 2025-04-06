@@ -1,5 +1,4 @@
-from decimal import Decimal, getcontext, ROUND_HALF_UP
-
+from decimal import ROUND_HALF_UP, Decimal, getcontext
 
 getcontext().rounding = ROUND_HALF_UP
 
