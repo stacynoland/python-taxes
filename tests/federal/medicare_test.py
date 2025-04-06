@@ -1,7 +1,7 @@
 from decimal import Decimal
 
-from pydantic import ValidationError
 import pytest
+from pydantic import ValidationError
 
 from python_taxes.federal import medicare
 
@@ -18,11 +18,11 @@ from python_taxes.federal import medicare
 class TestForZero:
     def test_required_withholding_zero(self, wages, expected):
         with expected as e:
-            assert (medicare.required_withholding(wages) == e)
+            assert medicare.required_withholding(wages) == e
 
     def test_additional_withholding_zero(self, wages, expected):
         with expected as e:
-            assert (medicare.additional_withholding(wages) == e)
+            assert medicare.additional_withholding(wages) == e
 
 
 @pytest.mark.parametrize(
@@ -33,12 +33,10 @@ class TestForZero:
     ],
 )
 def test_required_withholding_zero_all_params(
-    wages, wages_ytd, self_emp, rounded, expected):
-        with expected as e:
-            assert (
-                medicare.required_withholding(
-                     wages, wages_ytd, self_emp, rounded) == e
-            )
+    wages, wages_ytd, self_emp, rounded, expected
+):
+    with expected as e:
+        assert medicare.required_withholding(wages, wages_ytd, self_emp, rounded) == e
 
 
 @pytest.mark.parametrize(
@@ -49,12 +47,12 @@ def test_required_withholding_zero_all_params(
     ],
 )
 def test_additional_withholding_zero_all_params(
-    wages_ytd, self_emp, status, rounded, expected):
-        with expected as e:
-            assert (
-                medicare.additional_withholding(
-                     wages_ytd, self_emp, status, rounded) == e
-            )
+    wages_ytd, self_emp, status, rounded, expected
+):
+    with expected as e:
+        assert (
+            medicare.additional_withholding(wages_ytd, self_emp, status, rounded) == e
+        )
 
 
 # Negative Tests
@@ -68,11 +66,11 @@ def test_additional_withholding_zero_all_params(
 class TestForNegatives:
     def test_required_withholding_negative(self, wages, expected):
         with expected as e:
-            assert (medicare.required_withholding(wages) == e)
+            assert medicare.required_withholding(wages) == e
 
     def test_additional_withholding_negative(self, wages, expected):
         with expected as e:
-            assert (medicare.additional_withholding(wages) == e)
+            assert medicare.additional_withholding(wages) == e
 
 
 # Not Rounded Tests
@@ -87,11 +85,12 @@ class TestForNegatives:
     ],
 )
 def test_required_withholding_not_rounded(
-    wages, wages_ytd, self_emp, rounded, expected):
-        assert (
-            medicare.required_withholding(
-                 wages, wages_ytd, self_emp, rounded) == expected
-        )
+    wages, wages_ytd, self_emp, rounded, expected
+):
+    assert (
+        medicare.required_withholding(wages, wages_ytd, self_emp, rounded) == expected
+    )
+
 
 @pytest.mark.parametrize(
     "wages_ytd, status, self_emp, rounded, expected",
@@ -108,14 +107,15 @@ def test_required_withholding_not_rounded(
         (300563.00, "married", True, False, Decimal("9171.39")),
         (255674.00, "separate", True, False, Decimal("8590.61")),
         (255674.00, "hoh", True, False, Decimal("7915.61")),
-    ]
+    ],
 )
 def test_additional_withholding_not_rounded(
-    wages_ytd, status, self_emp, rounded, expected):
-        assert (
-            medicare.additional_withholding(
-                 wages_ytd, status, self_emp, rounded) == expected
-        )
+    wages_ytd, status, self_emp, rounded, expected
+):
+    assert (
+        medicare.additional_withholding(wages_ytd, status, self_emp, rounded)
+        == expected
+    )
 
 
 # Rounded Tests
@@ -129,12 +129,11 @@ def test_additional_withholding_not_rounded(
         (8475.55, 200000, False, True, Decimal("199.00")),
     ],
 )
-def test_required_withholding_rounded(
-    wages, wages_ytd, self_emp, rounded, expected):
-        assert (
-            medicare.required_withholding(
-                 wages, wages_ytd, self_emp, rounded) == expected
-        )
+def test_required_withholding_rounded(wages, wages_ytd, self_emp, rounded, expected):
+    assert (
+        medicare.required_withholding(wages, wages_ytd, self_emp, rounded) == expected
+    )
+
 
 @pytest.mark.parametrize(
     "wages_ytd, status, self_emp, rounded, expected",
@@ -151,11 +150,10 @@ def test_required_withholding_rounded(
         (300563.00, "married", True, True, Decimal("9171.00")),
         (255674.00, "separate", True, True, Decimal("8591.00")),
         (255674.00, "hoh", True, True, Decimal("7916.00")),
-    ]
+    ],
 )
-def test_additional_withholding_rounded(
-    wages_ytd, status, self_emp, rounded, expected):
-        assert (
-            medicare.additional_withholding(
-                 wages_ytd, status, self_emp, rounded) == expected
-        )
+def test_additional_withholding_rounded(wages_ytd, status, self_emp, rounded, expected):
+    assert (
+        medicare.additional_withholding(wages_ytd, status, self_emp, rounded)
+        == expected
+    )

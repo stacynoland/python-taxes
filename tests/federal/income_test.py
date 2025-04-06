@@ -1,7 +1,7 @@
 from decimal import Decimal
 
-from pydantic import ValidationError
 import pytest
+from pydantic import ValidationError
 
 from python_taxes.federal import income
 
@@ -18,11 +18,11 @@ from python_taxes.federal import income
 class TestForZero:
     def test_employer_withholding_zero(self, wages, expected):
         with expected as e:
-            assert (income.employer_withholding (wages) == e)
+            assert income.employer_withholding(wages) == e
 
     def test_additional_withholding_zero(self, wages, expected):
         with expected as e:
-            assert (income.employer_withholding_pre_2020(wages) == e)
+            assert income.employer_withholding_pre_2020(wages) == e
 
 
 # Negative Tests
@@ -36,8 +36,8 @@ class TestForZero:
 class TestForNegatives:
     def test_required_withholding_negative(self, wages, expected):
         with expected as e:
-            assert (income.employer_withholding(wages) == e)
+            assert income.employer_withholding(wages) == e
 
     def test_additional_withholding_negative(self, wages, expected):
         with expected as e:
-            assert (income.employer_withholding_pre_2020(wages) == e)
+            assert income.employer_withholding_pre_2020(wages) == e
