@@ -38,6 +38,9 @@ commands = ["mypy", "src{/}python_taxes"]
 
 [tool.isort]
 profile = "black"
+skip_gitignore = true
+extend_skip = [".pytest_cache",]
+skip_glob = ["*/__pycache__/*", "tests/__pycache__/*"]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
