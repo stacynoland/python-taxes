@@ -36,7 +36,15 @@ def test_required_withholding_zero_all_params(
     wages, wages_ytd, self_emp, rounded, expected
 ):
     with expected as e:
-        assert medicare.required_withholding(wages, wages_ytd, self_emp, rounded) == e
+        assert (
+            medicare.required_withholding(
+                taxable_wages=wages,
+                taxable_wages_ytd=wages_ytd,
+                self_employed=self_emp,
+                rounded=rounded,
+            )
+            == e
+        )
 
 
 @pytest.mark.parametrize(
@@ -51,7 +59,13 @@ def test_additional_withholding_zero_all_params(
 ):
     with expected as e:
         assert (
-            medicare.additional_withholding(wages_ytd, self_emp, status, rounded) == e
+            medicare.additional_withholding(
+                taxable_wages_ytd=wages_ytd,
+                self_employed=self_emp,
+                filing_status=status,
+                rounded=rounded,
+            )
+            == e
         )
 
 
@@ -77,18 +91,42 @@ class TestForNegatives:
 @pytest.mark.parametrize(
     "wages, wages_ytd, self_emp, rounded, expected",
     [
-        (4615.38, None, False, False, Decimal("66.92")),
-        (Decimal("3076.92"), None, False, False, Decimal("44.62")),
-        (2000.00, None, False, False, Decimal("29.00")),
         (10000.00, 200000.00, False, False, Decimal("235.00")),
         (8475.55, 200000, False, False, Decimal("199.18")),
     ],
 )
-def test_required_withholding_not_rounded(
+def test_required_withholding_not_rounded_with_ytd(
     wages, wages_ytd, self_emp, rounded, expected
 ):
     assert (
-        medicare.required_withholding(wages, wages_ytd, self_emp, rounded) == expected
+        medicare.required_withholding(
+            taxable_wages=wages,
+            taxable_wages_ytd=wages_ytd,
+            self_employed=self_emp,
+            rounded=rounded,
+        )
+        == expected
+    )
+
+
+@pytest.mark.parametrize(
+    "wages, self_emp, rounded, expected",
+    [
+        (4615.38, False, False, Decimal("66.92")),
+        (Decimal("3076.92"), False, False, Decimal("44.62")),
+        (2000.00, False, False, Decimal("29.00")),
+    ]
+)
+def test_required_withholding_not_rounded_no_ytd(
+    wages, self_emp, rounded, expected
+):
+    assert (
+        medicare.required_withholding(
+            taxable_wages=wages,
+            self_employed=self_emp,
+            rounded=rounded,
+        )
+        == expected
     )
 
 
@@ -122,16 +160,33 @@ def test_additional_withholding_not_rounded(
 @pytest.mark.parametrize(
     "wages, wages_ytd, self_emp, rounded, expected",
     [
-        (4615.38, None, False, True, Decimal("67.00")),
-        (Decimal("3076.92"), None, False, True, Decimal("45.00")),
-        (2000.00, None, False, True, Decimal("29.00")),
         (10000.00, 200000.00, False, True, Decimal("235.00")),
         (8475.55, 200000, False, True, Decimal("199.00")),
     ],
 )
-def test_required_withholding_rounded(wages, wages_ytd, self_emp, rounded, expected):
+def test_required_withholding_rounded_with_ytd(
+        wages, wages_ytd, self_emp, rounded, expected):
     assert (
         medicare.required_withholding(wages, wages_ytd, self_emp, rounded) == expected
+    )
+
+
+@pytest.mark.parametrize(
+    "wages, self_emp, rounded, expected",
+    [
+        (4615.38, False, False, Decimal("66.92")),
+        (Decimal("3076.92"), False, False, Decimal("44.62")),
+        (2000.00, False, False, Decimal("29.00")),
+    ]
+)
+def test_required_withholding_rounded_no_ytd(wages, self_emp, rounded, expected):
+    assert (
+        medicare.required_withholding(
+            taxable_wages=wages,
+            self_employed=self_emp,
+            rounded=rounded
+        )
+        == expected
     )
 
 
