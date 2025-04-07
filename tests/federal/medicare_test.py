@@ -61,8 +61,8 @@ def test_additional_withholding_zero_all_params(
         assert (
             medicare.additional_withholding(
                 taxable_wages_ytd=wages_ytd,
-                self_employed=self_emp,
                 filing_status=status,
+                self_employed=self_emp,
                 rounded=rounded,
             )
             == e
