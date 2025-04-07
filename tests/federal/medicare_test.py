@@ -115,11 +115,9 @@ def test_required_withholding_not_rounded_with_ytd(
         (4615.38, False, False, Decimal("66.92")),
         (Decimal("3076.92"), False, False, Decimal("44.62")),
         (2000.00, False, False, Decimal("29.00")),
-    ]
+    ],
 )
-def test_required_withholding_not_rounded_no_ytd(
-    wages, self_emp, rounded, expected
-):
+def test_required_withholding_not_rounded_no_ytd(wages, self_emp, rounded, expected):
     assert (
         medicare.required_withholding(
             taxable_wages=wages,
@@ -165,7 +163,8 @@ def test_additional_withholding_not_rounded(
     ],
 )
 def test_required_withholding_rounded_with_ytd(
-        wages, wages_ytd, self_emp, rounded, expected):
+    wages, wages_ytd, self_emp, rounded, expected
+):
     assert (
         medicare.required_withholding(wages, wages_ytd, self_emp, rounded) == expected
     )
@@ -177,14 +176,12 @@ def test_required_withholding_rounded_with_ytd(
         (4615.38, False, False, Decimal("66.92")),
         (Decimal("3076.92"), False, False, Decimal("44.62")),
         (2000.00, False, False, Decimal("29.00")),
-    ]
+    ],
 )
 def test_required_withholding_rounded_no_ytd(wages, self_emp, rounded, expected):
     assert (
         medicare.required_withholding(
-            taxable_wages=wages,
-            self_employed=self_emp,
-            rounded=rounded
+            taxable_wages=wages, self_employed=self_emp, rounded=rounded
         )
         == expected
     )
