@@ -6,7 +6,7 @@ authors = [
     {name = "Stacy Noland", email = "46572585+stacynoland@users.noreply.github.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12,<4.0"
 dependencies = [
     "pydantic (>=2.10.6,<3.0.0)"
 ]
@@ -25,7 +25,7 @@ isort = "^6.0.1"
 
 [tool.tox]
 requires = ["tox>=4.25.0,<5.0.0"]
-env_list = ["3.13", "type", "lint", "format"]
+env_list = ["3.13", "3.12", "type", "lint", "format"]
 
 [dependency-groups]
 pytest = [
@@ -34,6 +34,7 @@ pytest = [
 
 [tool.tox.env_run_base]
 description = "Run tests under {base_python}"
+package = "wheel"
 dependency_groups = ["pytest"]
 deps = [
     "pytest-cov>=6.1.0,<7.0.0",
@@ -42,6 +43,7 @@ commands = [["pytest"]]
 
 [tool.tox.env.type]
 description = "Run type checking on code base"
+package = "wheel"
 dependency_groups = ["pytest"]
 deps = [
     "mypy>=1.15.0,<2.0.0",
@@ -50,11 +52,13 @@ commands = [["mypy", "."]]
 
 [tool.tox.env.lint]
 description = "Run linters on code base"
+package = "wheel"
 deps = ["flake8>=7.2.0,<8.0.0"]
 commands = [["flake8", "."]]
 
 [tool.tox.env.format]
 description = "Run formatters on code base"
+package = "wheel"
 deps = [
     "black>=25.1.0,<26.0.0",
     "isort>=6.0.0,<7.0.0",
