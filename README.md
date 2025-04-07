@@ -1,5 +1,7 @@
 # Python-Taxes
 
+> Disclaimer: This library is not intended to be used for tax advice. Please consult a tax professional for any tax-related questions or concerns.
+
 Python-Taxes is a library designed to make calculating US Federal taxes easy.
 
 The library supports Social Security, Medicare, and Federal Income taxes for tax years 2023 to 2025. Please note, 2025 is only added for future tax season.
