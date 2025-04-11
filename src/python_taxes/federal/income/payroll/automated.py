@@ -88,7 +88,7 @@ def employer_withholding(
 
     tax_withholding = (
         adjusted_wage - withholding_rate.min
-    ) * withholding_rate.percent + withholding_rate.withhold_amount
+    ) * Decimal(withholding_rate.percent / 100) + withholding_rate.withhold_amount
 
     withheld_this_period = tax_withholding / pay_freq
 
@@ -154,7 +154,7 @@ def employer_withholding_pre_2020(
 
     tax_withholding = (
         adjusted_wage - withholding_rate.min
-    ) * withholding_rate.percent + withholding_rate.withhold_amount
+    ) * Decimal(withholding_rate.percent / 100) + withholding_rate.withhold_amount
 
     withheld_this_period = tax_withholding / pay_freq
 
