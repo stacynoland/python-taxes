@@ -40,6 +40,8 @@ def required_withholding(
 
     if self_employed:
         tax_rate = SELF_EMPLOYED_PERCENT
+        taxable_wages = taxable_wages * (Decimal("92.35") / 100)
+        taxable_wages_ytd = taxable_wages_ytd * (Decimal("92.35") / 100)
     else:
         tax_rate = STANDARD_PERCENT
 
@@ -70,6 +72,7 @@ def additional_withholding(
 
     if self_employed:
         tax_rate = SELF_EMPLOYED_PERCENT
+        taxable_wages_ytd = taxable_wages_ytd * (Decimal("92.35") / 100)
     else:
         tax_rate = STANDARD_PERCENT
 

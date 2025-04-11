@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 from decimal import Decimal
 
 import pytest
@@ -6,20 +7,24 @@ from pydantic import ValidationError
 from python_taxes.federal import social_security
 
 
-# Zero ($0) Tests
 @pytest.mark.parametrize(
     "wages, expected",
     [
+        # Zero ($0) Tests
         (0, pytest.raises(ValidationError)),
         ("0.00", pytest.raises(ValidationError)),
         (Decimal("0.00"), pytest.raises(ValidationError)),
+        # Negative Tests
+        (-1.00, pytest.raises(ValidationError)),
+        ("-10000", pytest.raises(ValidationError)),
     ],
 )
-def test_withholding_zero(wages, expected):
+def test_withholding_zero_or_negative(wages, expected):
     with expected as e:
         assert social_security.withholding(wages) == e
 
 
+# Zero ($0) with YTD Tests
 @pytest.mark.parametrize(
     "wages, wages_ytd, self_emp, rounded, expected",
     [
@@ -27,7 +32,7 @@ def test_withholding_zero(wages, expected):
         (100, 0, True, True, pytest.raises(ValidationError)),
     ],
 )
-def test_withholding_zero_all_params(wages, wages_ytd, self_emp, rounded, expected):
+def test_withholding_zero_with_ytd(wages, wages_ytd, self_emp, rounded, expected):
     with expected as e:
         assert (
             social_security.withholding(
@@ -40,60 +45,69 @@ def test_withholding_zero_all_params(wages, wages_ytd, self_emp, rounded, expect
         )
 
 
-# Negative Tests
 @pytest.mark.parametrize(
-    "wages, expected",
+    "wages, wages_ytd, self_emp, year, rounded, expected",
     [
-        (-1.00, pytest.raises(ValidationError)),
-        ("-10000", pytest.raises(ValidationError)),
+        # Not Rounded Tests
+        (4615.38, 100, False, None, False, Decimal("286.15")),
+        (3076.92, 100, False, None, False, Decimal("190.77")),
+        (2000.00, 100, False, None, False, Decimal("124.00")),
+        (10000.00, 100, False, None, False, Decimal("620.00")),
+        (8475.55, 100, False, None, False, Decimal("525.48")),
+        (2000.83, 170000.30, False, None, False, Decimal("0.00")),
+        (2000, 168000, False, None, False, Decimal("37.20")),
+        (2000, 168000, True, None, False, Decimal("229.03")),
+        (170000, 0, True, None, False, Decimal("19467.38")),
+        # Rounded Tests
+        (4615.38, 100, False, None, True, Decimal("286.00")),
+        (3076.92, 100, False, None, True, Decimal("191.00")),
+        (2000.00, 100, False, None, True, Decimal("124.00")),
+        (10000.00, 100, False, None, True, Decimal("620.00")),
+        (8475.55, 100, False, None, True, Decimal("525.00")),
+        (2000.83, 170000.30, False, None, True, Decimal("0.00")),
+        (2000, 168000, False, None, True, Decimal("37.00")),
+        (2000, 168000, True, None, True, Decimal("229.00")),
+        (170000, 0, True, None, True, Decimal("19467.00")),
+        # Tax Year Tests
+        (2000, 168000, False, 1234, False, pytest.raises(ValidationError)),
+        (2000, 168000, False, "1234", False, pytest.raises(ValidationError)),
+        (2000, 168000, False, "notnum", False, pytest.raises(ValidationError)),
+        (2000, 168000, True, 2024, False, nullcontext(Decimal("229.03"))),
+        (2000, 168000, True, "2024", False, nullcontext(Decimal("229.03"))),
     ],
 )
-def test_withholding_negative(wages, expected):
-    with expected as e:
-        assert social_security.withholding(wages) == e
-
-
-# Not Rounded Tests
-@pytest.mark.parametrize(
-    "wages, wages_ytd, self_emp, rounded, expected",
-    [
-        (4615.38, 100, False, False, Decimal("286.15")),
-        (Decimal("3076.92"), 100, False, False, Decimal("190.77")),
-        (2000.00, 100, False, False, Decimal("124.00")),
-        (10000.00, 100, False, False, Decimal("620.00")),
-        (8475.55, 100, False, False, Decimal("525.48")),
-    ],
-)
-def test_withholding_not_rounded(wages, wages_ytd, self_emp, rounded, expected):
-    assert (
-        social_security.withholding(
-            taxable_wages=wages,
-            taxable_wages_ytd=wages_ytd,
-            self_employed=self_emp,
-            rounded=rounded,
-        )
-        == expected
-    )
-
-
-# Rounded Tests
-@pytest.mark.parametrize(
-    "wages, wages_ytd, self_emp, rounded, expected",
-    [
-        (4615.38, 100, False, True, Decimal("286.00")),
-        (Decimal("3076.92"), 100, False, True, Decimal("191.00")),
-        (2000.00, 100, False, True, Decimal("124.00")),
-        (10000.00, 100, False, True, Decimal("620.00")),
-        (8475.55, 100, False, True, Decimal("525.00")),
-    ],
-)
-def test_required_withholding_rounded(wages, wages_ytd, self_emp, rounded, expected):
-    assert (
-        social_security.withholding(
-            taxable_wages=wages,
-            taxable_wages_ytd=wages_ytd,
-            self_employed=self_emp,
-            rounded=rounded,
-        )
-        == expected
-    )
+def test_withholding_2024(wages, wages_ytd, self_emp, year, rounded, expected):
+    if not year:
+        if wages_ytd == 0:
+            assert (
+                social_security.withholding(
+                    taxable_wages=wages,
+                    self_employed=self_emp,
+                    tax_year=2024,
+                    rounded=rounded,
+                )
+                == expected
+            )
+        else:
+            assert (
+                social_security.withholding(
+                    taxable_wages=wages,
+                    taxable_wages_ytd=wages_ytd,
+                    self_employed=self_emp,
+                    tax_year=2024,
+                    rounded=rounded,
+                )
+                == expected
+            )
+    else:
+        with expected as e:
+            assert (
+                social_security.withholding(
+                    taxable_wages=wages,
+                    taxable_wages_ytd=wages_ytd,
+                    self_employed=self_emp,
+                    tax_year=year,
+                    rounded=rounded,
+                )
+                == e
+            )

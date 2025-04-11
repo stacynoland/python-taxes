@@ -1,10 +1,10 @@
 from decimal import Decimal
-from typing import Annotated, Union
+from typing import Annotated
 
-from pydantic import StrictBool, validate_call
+from pydantic import AfterValidator, StrictBool, validate_call
 
 from python_taxes import CURRENT_TAX_YEAR, currency_field
-from python_taxes.federal import rounding
+from python_taxes.federal import is_valid_tax_year, rounding
 
 STANDARD_TAX = Decimal("6.200") / 100
 
@@ -22,7 +22,7 @@ def withholding(
     taxable_wages: Annotated[Decimal, currency_field],
     taxable_wages_ytd: Annotated[Decimal, currency_field] = Decimal("0.00"),
     self_employed: StrictBool = False,
-    tax_year: Union[int, str] = CURRENT_TAX_YEAR,
+    tax_year: Annotated[int, AfterValidator(is_valid_tax_year)] = CURRENT_TAX_YEAR,
     rounded: StrictBool = False,
 ) -> Decimal:
     """
@@ -38,10 +38,14 @@ def withholding(
 
     if self_employed:
         tax_rate = SELF_EMPLOYED_TAX
+        taxable_wages = taxable_wages * (Decimal("92.35") / 100)
+        print("Taxable Wages: ", taxable_wages)
+        taxable_wages_ytd = taxable_wages_ytd * (Decimal("92.35") / 100)
+        print("Taxable Wages YTD: ", taxable_wages_ytd)
     else:
         tax_rate = STANDARD_TAX
 
-    limit = wage_limit[int(tax_year)]
+    limit = wage_limit[tax_year]
 
     if taxable_wages_ytd > limit:
         return Decimal("0.00")  # Tax is 0 because limit is reached
