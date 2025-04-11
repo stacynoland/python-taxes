@@ -1,14 +1,14 @@
 [project]
 name = "python-taxes"
 version = "0.1.0"
-description = "Development in progress - please come back later."
+description = "A Python library for calculating US Social Security, Medicare, and Federal Income taxes."
 authors = [
     {name = "Stacy Noland", email = "46572585+stacynoland@users.noreply.github.com"}
 ]
 readme = "README.md"
 requires-python = ">=3.12,<4.0"
 dependencies = [
-    "pydantic (>=2.10.6,<3.0.0)"
+    "pydantic (>=2.11.3,<3.0.0)"
 ]
 
 [tool.poetry]
@@ -16,7 +16,7 @@ packages = [{include = "python_taxes", from = "src"}]
 
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"
-pytest-cov = "^6.1.0"
+pytest-cov = "^6.1.1"
 flake8 = "^7.2.0"
 mypy = "^1.15.0"
 tox = "^4.25.0"
