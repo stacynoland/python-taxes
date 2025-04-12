@@ -1,5 +1,5 @@
 from decimal import Decimal
-from typing import Annotated, Literal, Union
+from typing import Annotated, Literal
 
 from pydantic import StrictBool, validate_call
 
@@ -37,7 +37,7 @@ def employer_withholding(
     other_income: Annotated[Decimal, currency_field] = Decimal("0.00"),
     deductions: Annotated[Decimal, currency_field] = Decimal("0.00"),
     extra_withholding: Annotated[Decimal, currency_field] = Decimal("0.00"),
-    tax_year: Union[int, str] = CURRENT_TAX_YEAR,
+    tax_year: int = CURRENT_TAX_YEAR,
     rounded: StrictBool = False,
 ) -> Decimal:
     """Calculate income tax withholding.
@@ -81,14 +81,14 @@ def employer_withholding(
     adjusted_wage = ((taxable_wages * pay_freq) + other_income) - deductions
 
     # Step 2
-    for row in withholding_schedule[int(tax_year)]:
+    for row in withholding_schedule[tax_year]:
         if adjusted_wage >= row.min and adjusted_wage < row.max:
             withholding_rate = row
             break
 
-    tax_withholding = (
-        adjusted_wage - withholding_rate.min
-    ) * Decimal(withholding_rate.percent / 100) + withholding_rate.withhold_amount
+    tax_withholding = (adjusted_wage - withholding_rate.min) * Decimal(
+        withholding_rate.percent / 100
+    ) + withholding_rate.withhold_amount
 
     withheld_this_period = tax_withholding / pay_freq
 
@@ -100,7 +100,11 @@ def employer_withholding(
     if extra_withholding:
         withheld_this_period = withheld_this_period + extra_withholding
 
-    return Decimal(withheld_this_period).quantize(rounding[rounded])
+    return (
+        Decimal(withheld_this_period).quantize(rounding[rounded])
+        if withheld_this_period > 0
+        else Decimal("0.00")
+    )
 
 
 @validate_call
@@ -118,7 +122,7 @@ def employer_withholding_pre_2020(
     marital_status: Literal["single", "married", "separate"] = "single",
     allowances_claimed: int = 0,
     extra_withholding: Annotated[Decimal, currency_field] = Decimal("0.00"),
-    tax_year: Union[int, str] = CURRENT_TAX_YEAR,
+    tax_year: int = CURRENT_TAX_YEAR,
     rounded: StrictBool = False,
 ) -> Decimal:
     """Calculate income tax withholding - only if Form W-4 is 2019 or earlier.
@@ -147,14 +151,14 @@ def employer_withholding_pre_2020(
     adjusted_wage = (taxable_wages * pay_freq) - allowances
 
     # Step 2
-    for row in withholding_schedule[int(tax_year)]:
+    for row in withholding_schedule[tax_year]:
         if adjusted_wage >= row.min and adjusted_wage < row.max:
             withholding_rate = row
             break
 
-    tax_withholding = (
-        adjusted_wage - withholding_rate.min
-    ) * Decimal(withholding_rate.percent / 100) + withholding_rate.withhold_amount
+    tax_withholding = (adjusted_wage - withholding_rate.min) * Decimal(
+        withholding_rate.percent / 100
+    ) + withholding_rate.withhold_amount
 
     withheld_this_period = tax_withholding / pay_freq
 
@@ -163,4 +167,8 @@ def employer_withholding_pre_2020(
     if extra_withholding:
         withheld_this_period = withheld_this_period + extra_withholding
 
-    return Decimal(withheld_this_period).quantize(rounding[rounded])
+    return (
+        Decimal(withheld_this_period).quantize(rounding[rounded])
+        if withheld_this_period > 0
+        else Decimal("0.00")
+    )
