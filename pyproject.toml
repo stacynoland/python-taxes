@@ -6,10 +6,29 @@ authors = [
     {name = "Stacy Noland", email = "46572585+stacynoland@users.noreply.github.com"}
 ]
 readme = "README.md"
+license = { file = "LICENSE" }
 requires-python = ">=3.12,<4.0"
 dependencies = [
     "pydantic (>=2.11.3,<3.0.0)"
 ]
+classifiers = [
+    "Development Status :: 2 - Pre-Alpha",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Information Technology",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+
+[project.urls]
+Homepage = "https://github.com/stacynoland/python-taxes"
+Source = "https://github.com/stacynoland/python-taxes"
 
 [tool.poetry]
 packages = [{include = "python_taxes", from = "src"}]
@@ -22,6 +41,7 @@ mypy = "^1.15.0"
 tox = "^4.25.0"
 black = "^25.1.0"
 isort = "^6.0.1"
+pre-commit = "^4.2.0"
 
 [tool.tox]
 requires = ["tox>=4.25.0,<5.0.0"]
