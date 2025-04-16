@@ -33,4 +33,4 @@ jobs:
         run: |
           poetry install --with dev --no-interaction --no-ansi
       - name: Run tests
-        run: tox -e py
+        run: poetry run tox -e py
