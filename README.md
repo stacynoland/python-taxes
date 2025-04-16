@@ -1,3 +1,5 @@
+[![Tests](https://github.com/stacynoland/python-taxes/actions/workflows/test.yml/badge.svg)](https://github.com/stacynoland/install-poetry/actions/workflows/test.yml)
+
 # Python-Taxes
 
 > Disclaimer: This library is not intended to be used for tax advice. Please consult a tax professional for any tax-related questions or concerns.
