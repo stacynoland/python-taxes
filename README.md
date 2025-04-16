@@ -1,4 +1,6 @@
 [![Tests](https://github.com/stacynoland/python-taxes/actions/workflows/test.yml/badge.svg)](https://github.com/stacynoland/python-taxes/actions/workflows/test.yml)
+![Coverage](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fgithub.com%2Fstacynoland%2Fpython-taxes%2Fblob%2Fmain%2Fcoverage.json&query=%24.totals.percent_covered_display)
+
 
 # Python-Taxes
 
