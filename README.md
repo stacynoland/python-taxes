@@ -1,4 +1,4 @@
-[![Tests](https://github.com/stacynoland/python-taxes/actions/workflows/test.yml/badge.svg)](https://github.com/stacynoland/install-poetry/actions/workflows/test.yml)
+[![Tests](https://github.com/stacynoland/python-taxes/actions/workflows/test.yml/badge.svg)](https://github.com/stacynoland/python-taxes/actions/workflows/test.yml)
 
 # Python-Taxes
 
