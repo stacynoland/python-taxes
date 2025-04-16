@@ -1,4 +1,4 @@
-![cover](https://github.com/user-attachments/assets/da742c86-a4fa-4421-ab6a-1f0ec0a89597)
+![cover](https://github.com/user-attachments/assets/6c62946b-e749-46bb-a84e-6321397f1753)
 [![Tests](https://github.com/stacynoland/python-taxes/actions/workflows/test.yml/badge.svg)](https://github.com/stacynoland/python-taxes/actions/workflows/test.yml)
 ![Coverage](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fstacynoland%2Fpython-taxes%2Frefs%2Fheads%2Fmain%2Fcoverage.json&query=%24.totals.percent_covered_display&suffix=%25&label=Coverage&color=3fb831)
 ![Current Release](https://img.shields.io/badge/dynamic/toml?url=https%3A%2F%2Fraw.githubusercontent.com%2Fstacynoland%2Fpython-taxes%2Frefs%2Fheads%2Fmain%2Fpyproject.toml&query=%24.project.version&label=Current%20Release)
