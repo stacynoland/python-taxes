@@ -1,9 +1,10 @@
 ![Python Taxes Image](https://github.com/user-attachments/assets/6c62946b-e749-46bb-a84e-6321397f1753)
 ![Python Versions](https://img.shields.io/badge/Python-3.12%20%7C%203.13-blue?logo=python&logoColor=yellow)
-![GitHub Release](https://img.shields.io/github/v/release/stacynoland/python-taxes?label=Current%20Release)
+[![Poetry Package Manager](https://img.shields.io/endpoint?url=https%3A%2F%2Fpython-poetry.org%2Fbadge%2Fv0.json)](https://python-poetry.org/)
+[![Black](https://img.shields.io/badge/Code%20Style-black-000000)](https://github.com/psf/black)
+[![GitHub Release](https://img.shields.io/github/v/release/stacynoland/python-taxes?label=Current%20Release)](https://github.com/stacynoland/python-taxes/releases)
 [![Tests](https://github.com/stacynoland/python-taxes/actions/workflows/test.yml/badge.svg)](https://github.com/stacynoland/python-taxes/actions/workflows/test.yml)
 ![Coverage](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fstacynoland%2Fpython-taxes%2Frefs%2Fheads%2Fmain%2Fcoverage.json&query=%24.totals.percent_covered_display&suffix=%25&label=Coverage&color=3fb831)
-[![Black](https://img.shields.io/badge/code%20style-black-000000)](https://github.com/psf/black)
 
 > Disclaimer: This library is not intended to be used for tax advice. Please consult a tax professional for any tax-related questions or concerns.
 
