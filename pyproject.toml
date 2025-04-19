@@ -1,6 +1,6 @@
 [project]
 name = "python-taxes"
-version = "0.3.0"
+version = "0.4.0"
 description = "A Python library for calculating US Social Security, Medicare, and Federal Income taxes."
 authors = [
     {name = "Stacy Noland", email = "46572585+stacynoland@users.noreply.github.com"}
