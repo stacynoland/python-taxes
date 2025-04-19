@@ -7,7 +7,7 @@ authors = [
 ]
 readme = "README.md"
 license = { file = "LICENSE" }
-requires-python = ">=3.12,<4.0"
+requires-python = ">=3.9,<4.0"
 dependencies = [
     "pydantic (>=2.11.3,<3.0.0)"
 ]
