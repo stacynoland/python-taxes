@@ -14,8 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        python-version: ["3.12", "3.13"]
-        poetry-version: ["latest", "2.1.1"]
+        python-version: ["3.9", "3.10", "3.11", "3.12", "3.13"]
         os: ["ubuntu-latest", "macOS-latest", "windows-latest"]
     runs-on: ${{ matrix.os }}
 
