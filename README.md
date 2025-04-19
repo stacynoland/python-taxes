@@ -1,5 +1,5 @@
 ![Python Taxes Image](https://github.com/user-attachments/assets/6c62946b-e749-46bb-a84e-6321397f1753)
-![Python Versions](https://img.shields.io/badge/Python-3.12%20%7C%203.13-blue?logo=python&logoColor=yellow)
+![PyPI - Python Version](https://img.shields.io/pypi/pyversions/python-taxes?logo=python&logoColor=yellow&label=Python)
 [![GitHub Release](https://img.shields.io/github/v/release/stacynoland/python-taxes?label=Current%20Release)](https://github.com/stacynoland/python-taxes/releases)
 ![PyPI - Status](https://img.shields.io/pypi/status/python-taxes?label=Status)
 [![Tests](https://github.com/stacynoland/python-taxes/actions/workflows/test.yml/badge.svg)](https://github.com/stacynoland/python-taxes/actions/workflows/test.yml)
