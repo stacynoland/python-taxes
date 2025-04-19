@@ -23,6 +23,7 @@ classifiers = [
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
     "Typing :: Typed",
+    "Typing :: Typed :: MyPy",
     "Typing :: Typed :: Pydantic",
     "Topic :: Software Development :: Libraries",
     "Topic :: Software Development :: Libraries :: Python Modules",
@@ -47,7 +48,7 @@ pre-commit = "^4.2.0"
 
 [tool.tox]
 requires = ["tox>=4.25.0,<5.0.0"]
-env_list = ["3.13", "3.12", "type", "lint", "format"]
+env_list = ["py3", "type", "lint", "format"]
 
 [dependency-groups]
 pytest = [
