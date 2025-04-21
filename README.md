@@ -4,7 +4,6 @@
 ![PyPI - Status](https://img.shields.io/pypi/status/python-taxes?label=Status)
 [![Tests](https://github.com/stacynoland/python-taxes/actions/workflows/test.yml/badge.svg)](https://github.com/stacynoland/python-taxes/actions/workflows/test.yml)
 ![Coverage](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fstacynoland%2Fpython-taxes%2Frefs%2Fheads%2Fmain%2Fcoverage.json&query=%24.totals.percent_covered_display&suffix=%25&label=Coverage&color=3fb831)
-[![Poetry Package Manager](https://img.shields.io/endpoint?url=https%3A%2F%2Fpython-poetry.org%2Fbadge%2Fv0.json)](https://python-poetry.org/)
 [![Black](https://img.shields.io/badge/Code%20Style-black-000000)](https://github.com/psf/black)
 
 > Disclaimer: This library is not intended to be used for tax advice. Please consult a tax professional for any tax-related questions or concerns.
