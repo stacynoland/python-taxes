@@ -1,3 +1,7 @@
+# Distribution and cache files
 dist/
 __pycache__
 .coverage
+
+# Logo files
+python-taxes-logo/
