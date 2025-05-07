@@ -3,7 +3,7 @@ name = "python-taxes"
 version = "0.5.0"
 description = "A Python library for calculating US Social Security, Medicare, and Federal Income taxes."
 authors = [
-    {name = "Stacy Noland", email = "46572585+stacynoland@users.noreply.github.com"}
+    {name = "Stacy Noland", email = "stacy.noland@outlook.com"}
 ]
 readme = "README.md"
 license = { file = "LICENSE" }
@@ -24,10 +24,13 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
-    "Typing :: Typed",
     "Topic :: Software Development :: Libraries",
     "Topic :: Software Development :: Libraries :: Python Modules",
+    "Typing :: Typed",
 ]
+
+[project.optional-dependencies]
+cli = ["typer (>=0.15.3,<1.0.0)"]
 
 [project.urls]
 Homepage = "https://github.com/stacynoland/python-taxes"
@@ -36,14 +39,23 @@ Source = "https://github.com/stacynoland/python-taxes"
 [tool.poetry]
 packages = [{include = "python_taxes", from = "src"}]
 
+[tool.poetry.group.cli]
+optional = true
+
+[tool.poetry.group.cli.dependencies]
+typer = "^0.15.3"
+
+[tool.poetry.group.dev]
+optional = true
+
 [tool.poetry.group.dev.dependencies]
 pytest = "^8.3.5"
 pytest-cov = "^6.1.1"
+black = "^25.1.0"
 flake8 = "^7.2.0"
+isort = "^6.0.1"
 mypy = "^1.15.0"
 tox = "^4.25.0"
-black = "^25.1.0"
-isort = "^6.0.1"
 pre-commit = "^4.2.0"
 
 [tool.tox]
@@ -62,7 +74,7 @@ dependency_groups = ["pytest"]
 deps = [
     "pytest-cov>=6.1.0,<7.0.0",
 ]
-commands = [["pytest"]]
+commands = [["pytest --cov --cov-report json"]]
 
 [tool.tox.env.type]
 description = "Run type checking on code base"
