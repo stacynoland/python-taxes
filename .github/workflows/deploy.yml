@@ -1,0 +1,25 @@
+name: Deploy
+
+on:
+  workflow_call:
+
+jobs:
+  gh-pages:
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Download all workflow artifacts results
+        uses: actions/download-artifact@v4
+        with:
+          path: gh-pages/
+          pattern: gh-pages-*
+          merge-multiple: true
+      - name: Upload pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+            path: 'gh-pages/'
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4

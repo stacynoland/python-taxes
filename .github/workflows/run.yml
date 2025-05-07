@@ -1,0 +1,20 @@
+# This workflow runs the tests and deploys the application to GitHub Pages
+name: Run Tests and Deploy
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/test.yml
+      - 'pyproject.toml'
+      - 'poetry.lock'
+      - 'src/**'
+      - 'tests/**'
+
+jobs:
+  test:
+    uses: ./.github/workflows/test.yml
+  deploy:
+    needs: test
+    uses: ./.github/workflows/deploy.yml

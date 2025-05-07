@@ -1,15 +1,7 @@
 name: Tests
 
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - .github/workflows/test.yml
-      - 'pyproject.toml'
-      - 'poetry.lock'
-      - 'src/**'
-      - 'tests/**'
+  workflow_call:
 
 jobs:
   test:
@@ -37,23 +29,5 @@ jobs:
       - name: Archive code coverage results
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-report
-          path: gh-pages/coverage.json
-
-  gh-pages:
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download code coverage results
-        uses: actions/download-artifact@v4
-        with:
-          name: coverage-report
-      - name: Upload pages artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-            path: 'gh-pages/'
-      - name: Deploy to GitHub Pages
-        id: deploy
-        uses: actions/deploy-pages@v4
+          name: gh-pages-coverage-report
+          path: coverage.json
