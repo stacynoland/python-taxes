@@ -74,7 +74,7 @@ dependency_groups = ["pytest"]
 deps = [
     "pytest-cov>=6.1.0,<7.0.0",
 ]
-commands = [["pytest --cov --cov-report json"]]
+commands = [["pytest --cov --cov-report json:gh-pages/coverage.json"]]
 
 [tool.tox.env.type]
 description = "Run type checking on code base"
