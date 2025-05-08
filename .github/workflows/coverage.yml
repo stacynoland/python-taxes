@@ -9,8 +9,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-      with:
-        sparse-checkout: .
     - name: Install poetry
       uses: stacynoland/install-poetry@v1
     - name: Install dependencies
