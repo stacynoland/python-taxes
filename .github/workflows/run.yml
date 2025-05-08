@@ -19,4 +19,5 @@ jobs:
     needs: test
     uses: ./.github/workflows/coverage.yml
   deploy:
+    needs: coverage
     uses: ./.github/workflows/deploy.yml
