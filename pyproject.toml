@@ -30,7 +30,7 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-cli = ["typer (>=0.15.3,<1.0.0)"]
+cli = ["typer (>=0.15.0,<1.0.0)"]
 
 [project.urls]
 Homepage = "https://github.com/stacynoland/python-taxes"
@@ -71,10 +71,9 @@ pytest = [
 description = "Run tests under {base_python}"
 package = "wheel"
 dependency_groups = ["pytest"]
-deps = [
-    "pytest-cov>=6.1.0,<7.0.0",
+commands = [
+    ["pytest"]
 ]
-commands = [["pytest --cov --cov-report json:gh-pages/coverage.json"]]
 
 [tool.tox.env.type]
 description = "Run type checking on code base"

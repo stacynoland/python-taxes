@@ -15,6 +15,8 @@ on:
 jobs:
   test:
     uses: ./.github/workflows/test.yml
-  deploy:
+  coverage:
     needs: test
+    uses: ./.github/workflows/coverage.yml
+  deploy:
     uses: ./.github/workflows/deploy.yml

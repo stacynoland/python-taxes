@@ -983,4 +983,4 @@ cli = ["typer"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.10"
-content-hash = "743a6bbe607f1820f3946b7221799500ccaf379f4d715dc1227226456fe29329"
+content-hash = "38309aa5aa15ef252c19da49a931f0bc505108aa9decf99336b527b212db9316"

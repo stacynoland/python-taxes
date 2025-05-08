@@ -1,0 +1,26 @@
+name: Coverage
+
+on:
+  workflow_call:
+
+jobs:
+  coverage:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        sparse-checkout: .
+    - name: Install poetry
+      uses: stacynoland/install-poetry@v1
+    - name: Install dependencies
+      run: |
+        poetry install --with dev --no-interaction --no-ansi
+    - name: Generate coverage report
+      run: |
+        poetry run pytest --cov --cov-report json
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v4
+      with:
+        name: gh-pages-coverage-report
+        path: coverage.json
