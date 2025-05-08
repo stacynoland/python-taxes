@@ -1,6 +1,6 @@
 ![Python Taxes Image](https://github.com/user-attachments/assets/6c62946b-e749-46bb-a84e-6321397f1753)
 [![Tests](https://github.com/stacynoland/python-taxes/actions/workflows/test.yml/badge.svg)](https://github.com/stacynoland/python-taxes/actions/workflows/test.yml)
-![Coverage](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fraw.githubusercontent.com%2Fstacynoland%2Fpython-taxes%2Frefs%2Fheads%2Fmain%2Fcoverage.json&query=%24.totals.percent_covered_display&suffix=%25&label=coverage&color=3fb831)
+![Coverage](https://img.shields.io/badge/dynamic/json?url=https%3A%2F%2Fstacynoland.com%2Fpython-taxes%2Fcoverage.json&query=%24.totals.percent_covered_display&suffix=%25&label=coverage&color=3fb831)
 ![PyPI - Python Version](https://img.shields.io/pypi/pyversions/python-taxes?logo=python&logoColor=yellow)
 [![PyPI - Version](https://img.shields.io/pypi/v/python-taxes)](https://pypi.org/project/python-taxes/)
 ![PyPI - Status](https://img.shields.io/pypi/status/python-taxes)
