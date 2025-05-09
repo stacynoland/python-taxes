@@ -22,16 +22,22 @@ PAY_FREQUENCY = {
 @validate_call
 def employer_withholding(
     taxable_wages: Annotated[Decimal, currency_field],
-    pay_frequency: Literal[
-        "semiannual",
-        "quarterly",
-        "monthly",
-        "semimonthly",
-        "biweekly",
-        "weekly",
-        "daily",
+    pay_frequency: Annotated[
+        str,
+        Literal[
+            "semiannual",
+            "quarterly",
+            "monthly",
+            "semimonthly",
+            "biweekly",
+            "weekly",
+            "daily",
+        ],
     ] = "biweekly",
-    filing_status: Literal["single", "married", "separate", "hoh"] = "single",
+    filing_status: Annotated[
+        str,
+        Literal["single", "married", "separate", "hoh"],
+    ] = "single",
     multiple_jobs: StrictBool = False,
     tax_credits: Annotated[Decimal, currency_field] = Decimal("0.00"),
     other_income: Annotated[Decimal, currency_field] = Decimal("0.00"),
