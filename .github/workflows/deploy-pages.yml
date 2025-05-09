@@ -2,12 +2,15 @@ name: Deploy to GitHub Pages
 
 on:
   workflow_run:
-    workflows: [Coverage]
+    workflows: [Checks]
     types: [completed]
   workflow_call:
 
 jobs:
+  coverage:
+    uses: ./.github/workflows/coverage.yml
   deploy:
+    needs: coverage
     permissions:
       pages: write
       id-token: write
