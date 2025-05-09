@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - .github/workflows/tests.yml
+      - .github/workflows/checks.yml
+      - .github/workflows/coverage.yml
       - 'pyproject.toml'
       - 'poetry.lock'
       - 'src/**'
