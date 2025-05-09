@@ -1,0 +1,25 @@
+name: GitHub Release
+
+on:
+  push:
+    tags:
+      - v**
+  workflow_call:
+
+jobs:
+  github-release:
+    name: Create GitHub Release
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Create GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: >-
+          gh release create
+          "$GITHUB_REF_NAME"
+          --verify-tag
+          --repo "$GITHUB_REPOSITORY"
+          --notes-from-tag

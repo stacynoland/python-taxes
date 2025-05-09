@@ -60,38 +60,59 @@ pre-commit = "^4.2.0"
 
 [tool.tox]
 requires = ["tox>=4.25.0,<5.0.0"]
-env_list = ["type", "lint", "format"]
+env_list = ["lint", "testcov"]
+labels = { tests = ["3.10", "3.11", "3.12", "3.13"] }
 
 [dependency-groups]
-pytest = [
+tests = [
     "pytest>=8.3.0,<9.0.0",
 ]
-
-[tool.tox.env.type]
-description = "Run type checking on code base"
-package = "wheel"
-dependency_groups = ["pytest"]
-deps = [
-    "mypy>=1.15.0,<2.0.0",
-]
-commands = [["mypy", "."]]
-
-[tool.tox.env.lint]
-description = "Run linters on code base"
-package = "wheel"
-deps = ["flake8>=7.2.0,<8.0.0"]
-commands = [["flake8", "."]]
-
-[tool.tox.env.format]
-description = "Run formatters on code base"
-package = "wheel"
-deps = [
+static = [
     "black>=25.1.0,<26.0.0",
     "isort>=6.0.0,<7.0.0",
+    "flake8>=7.2.0,<8.0.0",
+    "mypy>=1.15.0,<2.0.0",
+]
+
+[tool.tox.env_run_base]
+description = "Run tests under {base_python}"
+package = "wheel"
+dependency_groups = ["tests"]
+commands = [
+    ["pytest", { replace = "posargs", default = ["tests"], extend = true }],
+]
+
+[tool.tox.env.testcov]
+description = "Run tests and coverage report"
+package = "wheel"
+dependency_groups = ["tests"]
+deps = [
+    "pytest-cov>=6.1.0,<7.0.0",
 ]
 commands = [
-    ["black", "."],
-    ["isort", "."],
+    ["pytest", { replace = "posargs", default = ["--cov", "--cov-report", "term-missing"], extend = true }],
+]
+
+[tool.tox.env.lint]
+description = "Lint code base"
+package = "wheel"
+dependency_groups = ["static", "tests"]
+commands = [
+    ["black", { replace = "posargs", default = ["."], extend = true }],
+    ["isort", { replace = "posargs", default = ["src", "tests"], extend = true }],
+    ["flake8", { replace = "posargs", default = ["src", "tests"], extend = true }],
+    ["mypy", { replace = "posargs", default = ["src", "tests"], extend = true }],
+]
+
+[tool.tox.env.check]
+description = "Check code base"
+package = "wheel"
+dependency_groups = ["static", "tests"]
+commands = [
+    ["black", { replace = "posargs", default = ["--check", "."], extend = true }],
+    ["isort", { replace = "posargs", default = ["--check-only", "src", "tests"], extend = true }],
+    ["flake8", { replace = "posargs", default = ["src", "tests"], extend = true }],
+    ["mypy", { replace = "posargs", default = ["src", "tests"], extend = true }],
 ]
 
 [tool.isort]

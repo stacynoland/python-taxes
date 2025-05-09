@@ -1,0 +1,40 @@
+name: Tests
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - .github/workflows/tests.yml
+      - 'pyproject.toml'
+      - 'poetry.lock'
+      - 'src/**'
+      - 'tests/**'
+  workflow_call:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: ["ubuntu-latest", "macOS-latest", "windows-latest"]
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: |
+            3.10
+            3.11
+            3.12
+            3.13
+      - name: Install poetry
+        uses: stacynoland/install-poetry@v1
+      - name: Install dependencies
+        run: |
+          poetry install --with dev --no-interaction --no-ansi
+      - name: Run tests
+        run: poetry run tox -m tests
