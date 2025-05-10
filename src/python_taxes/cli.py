@@ -1,5 +1,5 @@
 import sys
-from decimal import Decimal
+from typing import Union
 
 from pydantic import StrictBool
 from typing_extensions import Annotated
@@ -27,11 +27,14 @@ def callback():
 
 @app.command()
 def med(
-    wages: Annotated[Decimal, typer.Argument(help="Taxable wages this period")],
+    wages: Annotated[
+        Union[int, float, str],
+        typer.Argument(help="Taxable wages this period"),
+    ],
     ytd: Annotated[
-        Decimal,
+        Union[int, float, str],
         typer.Option(help="Total taxable wages paid year-to-date"),
-    ] = Decimal("0.00"),
+    ] = "0.00",
     selfemp: Annotated[
         StrictBool,
         typer.Option(help="Whether to calculate as self-employed"),
@@ -47,11 +50,14 @@ def med(
 
 @app.command()
 def ss(
-    wages: Annotated[Decimal, typer.Argument(help="Taxable wages this period")],
+    wages: Annotated[
+        Union[int, float, str],
+        typer.Argument(help="Taxable wages this period"),
+    ],
     ytd: Annotated[
-        Decimal,
+        Union[int, float, str],
         typer.Option(help="Total taxable wages paid year-to-date"),
-    ] = Decimal("0.00"),
+    ] = "0.00",
     selfemp: Annotated[
         StrictBool,
         typer.Option(help="Whether to calculate as self-employed"),
@@ -68,7 +74,10 @@ def ss(
 
 @app.command()
 def income(
-    wages: Annotated[Decimal, typer.Argument(help="Taxable wages this period")],
+    wages: Annotated[
+        Union[int, float, str],
+        typer.Argument(help="Taxable wages this period"),
+    ],
     freq: Annotated[str, typer.Option(help="Pay frequency")] = "biweekly",
     status: Annotated[str, typer.Option(help="Filing status")] = "single",
     mjobs: Annotated[
@@ -76,21 +85,21 @@ def income(
         typer.Option(help="Select True if box in Step 2 on W-4 checked"),
     ] = False,
     credits: Annotated[
-        Decimal,
+        Union[int, float, str],
         typer.Option(help="Amount to claim for dependents and credits"),
-    ] = Decimal("0.00"),
+    ] = "0.00",
     other: Annotated[
-        Decimal,
+        Union[int, float, str],
         typer.Option(help="Income not from jobs"),
-    ] = Decimal("0.00"),
+    ] = "0.00",
     deduct: Annotated[
-        Decimal,
+        Union[int, float, str],
         typer.Option(help="Deductions other than standard"),
-    ] = Decimal("0.00"),
+    ] = "0.00",
     extra: Annotated[
-        Decimal,
+        Union[int, float, str],
         typer.Option(help="Extra to withhold each period"),
-    ] = Decimal("0.00"),
+    ] = "0.00",
     year: Annotated[int, typer.Option(help="Enter the tax year")] = CURRENT_TAX_YEAR,
     round: Annotated[
         StrictBool,
