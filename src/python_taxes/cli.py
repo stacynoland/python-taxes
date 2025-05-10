@@ -1,4 +1,5 @@
 import sys
+from decimal import Decimal
 from typing import Union
 
 from pydantic import StrictBool
@@ -18,6 +19,14 @@ except ImportError:
 app = typer.Typer()
 
 
+def parse_decimal(value: Union[str, int, float]) -> Decimal:
+    try:
+        return Decimal(value)
+    except TypeError as e:
+        print(f"TypeError: {e}")
+        raise typer.BadParameter(f"Cannot convert value to Decimal: {value}")
+
+
 @app.callback()
 def callback():
     """
@@ -28,13 +37,14 @@ def callback():
 @app.command()
 def med(
     wages: Annotated[
-        Union[int, float, str],
-        typer.Argument(help="Taxable wages this period"),
+        Decimal, typer.Argument(parser=parse_decimal, help="Taxable wages this period")
     ],
     ytd: Annotated[
-        Union[int, float, str],
-        typer.Option(help="Total taxable wages paid year-to-date"),
-    ] = "0.00",
+        Decimal,
+        typer.Option(
+            parser=parse_decimal, help="Total taxable wages paid year-to-date"
+        ),
+    ] = Decimal("0.00"),
     selfemp: Annotated[
         StrictBool,
         typer.Option(help="Whether to calculate as self-employed"),
@@ -51,13 +61,15 @@ def med(
 @app.command()
 def ss(
     wages: Annotated[
-        Union[int, float, str],
-        typer.Argument(help="Taxable wages this period"),
+        Decimal,
+        typer.Argument(parser=parse_decimal, help="Taxable wages this period"),
     ],
     ytd: Annotated[
-        Union[int, float, str],
-        typer.Option(help="Total taxable wages paid year-to-date"),
-    ] = "0.00",
+        Decimal,
+        typer.Option(
+            parser=parse_decimal, help="Total taxable wages paid year-to-date"
+        ),
+    ] = Decimal("0.00"),
     selfemp: Annotated[
         StrictBool,
         typer.Option(help="Whether to calculate as self-employed"),
@@ -75,8 +87,8 @@ def ss(
 @app.command()
 def income(
     wages: Annotated[
-        Union[int, float, str],
-        typer.Argument(help="Taxable wages this period"),
+        Decimal,
+        typer.Argument(parser=parse_decimal, help="Taxable wages this period"),
     ],
     freq: Annotated[str, typer.Option(help="Pay frequency")] = "biweekly",
     status: Annotated[str, typer.Option(help="Filing status")] = "single",
@@ -85,21 +97,23 @@ def income(
         typer.Option(help="Select True if box in Step 2 on W-4 checked"),
     ] = False,
     credits: Annotated[
-        Union[int, float, str],
-        typer.Option(help="Amount to claim for dependents and credits"),
-    ] = "0.00",
+        Decimal,
+        typer.Option(
+            parser=parse_decimal, help="Amount to claim for dependents and credits"
+        ),
+    ] = Decimal("0.00"),
     other: Annotated[
-        Union[int, float, str],
-        typer.Option(help="Income not from jobs"),
-    ] = "0.00",
+        Decimal,
+        typer.Option(parser=parse_decimal, help="Income not from jobs"),
+    ] = Decimal("0.00"),
     deduct: Annotated[
-        Union[int, float, str],
-        typer.Option(help="Deductions other than standard"),
-    ] = "0.00",
+        Decimal,
+        typer.Option(parser=parse_decimal, help="Deductions other than standard"),
+    ] = Decimal("0.00"),
     extra: Annotated[
-        Union[int, float, str],
-        typer.Option(help="Extra to withhold each period"),
-    ] = "0.00",
+        Decimal,
+        typer.Option(parser=parse_decimal, help="Extra to withhold each period"),
+    ] = Decimal("0.00"),
     year: Annotated[int, typer.Option(help="Enter the tax year")] = CURRENT_TAX_YEAR,
     round: Annotated[
         StrictBool,
