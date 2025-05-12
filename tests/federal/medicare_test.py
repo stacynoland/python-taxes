@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 from decimal import Decimal
 
 import pytest
@@ -10,9 +11,9 @@ from python_taxes.federal import medicare
     "wages, expected",
     [
         # Zero ($0) Tests
-        (0, pytest.raises(ValidationError)),
-        ("0.00", pytest.raises(ValidationError)),
-        (Decimal("0.00"), pytest.raises(ValidationError)),
+        (0, nullcontext(Decimal("0.00"))),
+        ("0.00", nullcontext(Decimal("0.00"))),
+        (Decimal("0.00"), nullcontext(Decimal("0.00"))),
         # Negative Tests
         (-1.00, pytest.raises(ValidationError)),
         ("-10000", pytest.raises(ValidationError)),
@@ -32,8 +33,8 @@ class TestForZeroOrNegative:
 @pytest.mark.parametrize(
     "wages, wages_ytd, self_emp, rounded, expected",
     [
-        (0, 0, False, True, pytest.raises(ValidationError)),
-        ("0.01", "0.00", True, False, pytest.raises(ValidationError)),
+        (0, 0, False, True, nullcontext(Decimal("0.00"))),
+        ("0.01", "0.00", True, False, nullcontext(Decimal("0.00"))),
     ],
 )
 def test_required_withholding_zero_with_args(
@@ -55,8 +56,8 @@ def test_required_withholding_zero_with_args(
 @pytest.mark.parametrize(
     "wages_ytd, self_emp, status, rounded, expected",
     [
-        (0, False, "single", False, pytest.raises(ValidationError)),
-        ("0.00", True, "married", True, pytest.raises(ValidationError)),
+        (0, False, "single", False, nullcontext(Decimal("0.00"))),
+        ("0.00", True, "married", True, nullcontext(Decimal("0.00"))),
     ],
 )
 def test_additional_withholding_zero_with_args(

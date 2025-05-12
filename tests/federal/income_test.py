@@ -1,3 +1,4 @@
+from contextlib import nullcontext
 from decimal import Decimal
 
 import pytest
@@ -10,9 +11,9 @@ from python_taxes.federal import income
     "wages, expected",
     [
         # Zero ($0) Tests
-        (0, pytest.raises(ValidationError)),
-        ("0.00", pytest.raises(ValidationError)),
-        (Decimal("0.00"), pytest.raises(ValidationError)),
+        (0, nullcontext(Decimal("0.00"))),
+        ("0.00", nullcontext(Decimal("0.00"))),
+        (Decimal("0.00"), nullcontext(Decimal("0.00"))),
         # Negative Tests
         (-1.00, pytest.raises(ValidationError)),
         ("-10000", pytest.raises(ValidationError)),
@@ -33,6 +34,7 @@ class TestZeroOrNegative:
     "wages, rounded, expected",
     [
         # Not Rounded Tests
+        (100, False, Decimal("0.00")),
         (3846.15, False, Decimal("532.35")),
         (3384.62, False, Decimal("430.81")),
         (5769.23, False, Decimal("982.25")),
@@ -41,6 +43,7 @@ class TestZeroOrNegative:
         (11538.46, False, Decimal("2702.49")),
         (23076.92, False, Decimal("6740.95")),
         # Rounded Tests
+        (100, True, Decimal("0.00")),
         (3846.15, True, Decimal("532.00")),
         (3384.62, True, Decimal("431.00")),
         (5769.23, True, Decimal("982.00")),

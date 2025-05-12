@@ -11,9 +11,9 @@ from python_taxes.federal import social_security
     "wages, expected",
     [
         # Zero ($0) Tests
-        (0, pytest.raises(ValidationError)),
-        ("0.00", pytest.raises(ValidationError)),
-        (Decimal("0.00"), pytest.raises(ValidationError)),
+        (0, nullcontext(Decimal("0.00"))),
+        ("0.00", nullcontext(Decimal("0.00"))),
+        (Decimal("0.00"), nullcontext(Decimal("0.00"))),
         # Negative Tests
         (-1.00, pytest.raises(ValidationError)),
         ("-10000", pytest.raises(ValidationError)),
@@ -28,8 +28,8 @@ def test_withholding_zero_or_negative(wages, expected):
 @pytest.mark.parametrize(
     "wages, wages_ytd, self_emp, rounded, expected",
     [
-        (0, 100, False, False, pytest.raises(ValidationError)),
-        (100, 0, True, True, pytest.raises(ValidationError)),
+        (0, 100, False, False, nullcontext(Decimal("0.00"))),
+        (100, 0, True, True, nullcontext(Decimal("11.00"))),
     ],
 )
 def test_withholding_zero_with_ytd(wages, wages_ytd, self_emp, rounded, expected):
