@@ -57,7 +57,9 @@ def required_withholding(
 @validate_call
 def additional_withholding(
     taxable_wages_ytd: Annotated[Decimal, currency_field],
-    filing_status: Literal["single", "married", "separate", "hoh"] = "single",
+    filing_status: Annotated[
+        str, Literal["single", "married", "separate", "hoh"]
+    ] = "single",
     self_employed: StrictBool = False,
     rounded: StrictBool = False,
 ) -> Decimal:

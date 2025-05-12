@@ -39,9 +39,7 @@ def withholding(
     if self_employed:
         tax_rate = SELF_EMPLOYED_TAX
         taxable_wages = taxable_wages * (Decimal("92.35") / 100)
-        print("Taxable Wages: ", taxable_wages)
         taxable_wages_ytd = taxable_wages_ytd * (Decimal("92.35") / 100)
-        print("Taxable Wages YTD: ", taxable_wages_ytd)
     else:
         tax_rate = STANDARD_TAX
 

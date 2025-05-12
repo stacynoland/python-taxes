@@ -35,8 +35,7 @@ def employer_withholding(
         ],
     ] = "biweekly",
     filing_status: Annotated[
-        str,
-        Literal["single", "married", "separate", "hoh"],
+        str, Literal["single", "married", "separate", "hoh"]
     ] = "single",
     multiple_jobs: StrictBool = False,
     tax_credits: Annotated[Decimal, currency_field] = Decimal("0.00"),
@@ -87,6 +86,8 @@ def employer_withholding(
     adjusted_wage = ((taxable_wages * pay_freq) + other_income) - deductions
 
     # Step 2
+    if adjusted_wage < 0:
+        withholding_rate = withholding_schedule[tax_year][0]
     for row in withholding_schedule[tax_year]:
         if adjusted_wage >= row.min and adjusted_wage < row.max:
             withholding_rate = row
@@ -116,16 +117,19 @@ def employer_withholding(
 @validate_call
 def employer_withholding_pre_2020(
     taxable_wages: Annotated[Decimal, currency_field],
-    pay_frequency: Literal[
-        "semiannual",
-        "quarterly",
-        "monthly",
-        "semimonthly",
-        "biweekly",
-        "weekly",
-        "daily",
+    pay_frequency: Annotated[
+        str,
+        Literal[
+            "semiannual",
+            "quarterly",
+            "monthly",
+            "semimonthly",
+            "biweekly",
+            "weekly",
+            "daily",
+        ],
     ] = "biweekly",
-    marital_status: Literal["single", "married", "separate"] = "single",
+    marital_status: Annotated[str, Literal["single", "married", "separate"]] = "single",
     allowances_claimed: int = 0,
     extra_withholding: Annotated[Decimal, currency_field] = Decimal("0.00"),
     tax_year: int = CURRENT_TAX_YEAR,
