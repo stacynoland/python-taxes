@@ -18,7 +18,7 @@ jobs:
       uses: stacynoland/install-poetry@v1
     - name: Install dependencies
       run: |
-        poetry install --with dev --no-interaction --no-ansi
+        poetry install --all-groups --no-interaction --no-ansi
     - name: Generate coverage report
       run: |
         poetry run pytest --cov --cov-report json
