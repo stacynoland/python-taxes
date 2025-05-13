@@ -50,7 +50,6 @@ jobs:
 
   publish-to-testpypi:
     name: Publish to Test PyPI
-    if: ${{ contains(github.ref, 'alpha') }} || ${{ contains(github.ref, 'beta') }}
     needs: build
     permissions:
       id-token: write
