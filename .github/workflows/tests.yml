@@ -37,6 +37,6 @@ jobs:
         uses: stacynoland/install-poetry@v1
       - name: Install dependencies
         run: |
-          poetry install --with dev --no-interaction --no-ansi
+          poetry install --all-groups --no-interaction --no-ansi
       - name: Run tests
         run: poetry run tox -m tests
