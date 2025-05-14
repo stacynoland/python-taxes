@@ -35,3 +35,7 @@ jobs:
           --verify-tag
           --notes-from-tag
           --prerelease
+
+  publish-to-pypi:
+    name: Publish Release Version to PyPI
+    uses: ./.github/workflows/publish-pypi.yml
