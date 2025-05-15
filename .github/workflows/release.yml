@@ -1,4 +1,4 @@
-name: GitHub Release
+name: Release
 
 on:
   push:
@@ -9,6 +9,7 @@ on:
 jobs:
   github-release:
     name: Create GitHub Release
+    if: ${{ ! contains(github.ref, 'alpha') && ! contains(github.ref, 'beta') }}
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -16,8 +17,7 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Create GitHub Release
-        if: ${{ ! contains(github.ref, 'alpha') && ! contains(github.ref, 'beta') }}
+      - name: Create release
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: >-
@@ -25,8 +25,18 @@ jobs:
           "$GITHUB_REF_NAME"
           --verify-tag
           --notes-from-tag
-      - name: Create GitHub Prerelease
-        if: contains(github.ref, 'alpha') || contains(github.ref, 'beta')
+
+  github-prerelease:
+    name: Create GitHub Pre-Release
+    if: contains(github.ref, 'alpha') || contains(github.ref, 'beta')
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Create pre-release
         env:
           GITHUB_TOKEN: ${{ github.token }}
         run: >-
@@ -35,7 +45,3 @@ jobs:
           --verify-tag
           --notes-from-tag
           --prerelease
-
-  publish-to-pypi:
-    name: Publish Release Version to PyPI
-    uses: ./.github/workflows/publish-pypi.yml

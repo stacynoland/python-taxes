@@ -1,6 +1,9 @@
 name: Publish to PyPI
 
 on:
+  workflow_run:
+    workflows: [Release]
+    types: [completed]
   release:
     types:
       - published
@@ -70,9 +73,9 @@ jobs:
         with:
           repository-url: https://test.pypi.org/legacy/
 
-  github-release:
+  upload-github-release:
     name: Sign distributions and upload to GitHub Release
-    if: ${{ success() }}
+    needs: [publish-to-pypi, publish-to-testpypi]
     permissions:
       contents: write
       id-token: write
