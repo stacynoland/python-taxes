@@ -4,11 +4,34 @@ on:
   workflow_run:
     workflows: [Tests]
     types: [completed]
-  workflow_call:
 
 jobs:
   coverage:
-    uses: ./.github/workflows/coverage.yml
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.event.workflow_run.head_branch }}
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.13'
+    - name: Install poetry
+      uses: stacynoland/install-poetry@v1
+    - name: Install dependencies
+      run: |
+        poetry install --all-groups --no-interaction --no-ansi
+    - name: Generate coverage report
+      run: |
+        poetry run pytest --cov --cov-report json
+    - name: Archive code coverage results
+      uses: actions/upload-artifact@v4
+      with:
+        name: gh-pages-coverage-report
+        path: coverage.json
+
   deploy:
     needs: coverage
     permissions:
