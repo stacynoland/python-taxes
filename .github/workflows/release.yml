@@ -9,7 +9,7 @@ on:
 jobs:
   github-release:
     name: Create GitHub Release
-    if: ${{ ! contains(github.ref, 'alpha') && ! contains(github.ref, 'beta') }}
+    if: ${{ !contains(github.ref, 'alpha') && !contains(github.ref, 'beta') }}
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -45,3 +45,97 @@ jobs:
           --verify-tag
           --notes-from-tag
           --prerelease
+
+  build:
+    name: Build distribution packages
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install Poetry
+        uses: stacynoland/install-poetry@v1
+      - name: Build packages
+        run: |
+          poetry build --clean
+      - name: Archive distribution packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: pypi-dist
+          path: dist/
+
+  publish-to-testpypi:
+    name: Publish to Test PyPI
+    needs: [github-prerelease, build]
+    permissions:
+      id-token: write
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/python-taxes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download archived distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: pypi-dist
+          path: dist/
+      - name: Publish dist contents to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+
+  publish-to-pypi:
+    name: Publish to PyPI
+    if: ${{ !contains(github.ref, 'alpha') && !contains(github.ref, 'beta') }}
+    needs: [github-release, build]
+    permissions:
+      id-token: write
+    environment:
+      name: pypi
+      url: https://pypi.org/p/python-taxes
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download archived distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: pypi-dist
+          path: dist/
+      - name: Publish dist contents to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+
+  upload-github-release:
+    name: Sign distributions and upload to GitHub Release
+    needs: [publish-to-testpypi, publish-to-pypi]
+    permissions:
+      contents: write
+      id-token: write
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Download archived distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: pypi-dist
+          path: dist/
+      - name: Sign distributions with Sigstore
+        uses: sigstore/gh-action-sigstore-python@v3.0.0
+        with:
+          inputs: >-
+            ./dist/*.tar.gz
+            ./dist/*.whl
+      - name: Upload signed artifacts to GitHub Release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: >-
+          gh release upload
+          "$GITHUB_REF_NAME" dist/**
+          --clobber
+          --repo "$GITHUB_REPOSITORY"
