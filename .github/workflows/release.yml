@@ -1,6 +1,8 @@
 name: Release
 
 on:
+  release:
+    types: [published]
   push:
     tags:
       - v**
@@ -9,7 +11,7 @@ on:
 jobs:
   github-release:
     name: Create GitHub Release
-    if: ${{ !contains(github.ref, 'alpha') && !contains(github.ref, 'beta') }}
+    if: ${{ !contains(github.ref, 'alpha') && !contains(github.ref, 'beta') && github.event_name == 'push' }}
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -28,7 +30,7 @@ jobs:
 
   github-prerelease:
     name: Create GitHub Pre-Release
-    if: contains(github.ref, 'alpha') || contains(github.ref, 'beta')
+    if: (contains(github.ref, 'alpha') || contains(github.ref, 'beta')) && github.event_name == 'push'
     permissions:
       contents: write
     runs-on: ubuntu-latest
@@ -68,31 +70,9 @@ jobs:
           name: pypi-dist
           path: dist/
 
-  publish-to-testpypi:
-    name: Publish to Test PyPI
-    needs: [github-prerelease, build]
-    permissions:
-      id-token: write
-    environment:
-      name: testpypi
-      url: https://test.pypi.org/p/python-taxes
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Download archived distributions
-        uses: actions/download-artifact@v4
-        with:
-          name: pypi-dist
-          path: dist/
-      - name: Publish dist contents to PyPI
-        uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
-
   publish-to-pypi:
     name: Publish to PyPI
-    if: ${{ !contains(github.ref, 'alpha') && !contains(github.ref, 'beta') }}
-    needs: [github-release, build]
+    needs: [build]
     permissions:
       id-token: write
     environment:
@@ -111,7 +91,12 @@ jobs:
 
   upload-github-release:
     name: Sign distributions and upload to GitHub Release
-    needs: [publish-to-testpypi, publish-to-pypi]
+    needs: [github-release, github-prerelease, publish-to-pypi]
+    if: |
+      always() &&
+      (needs.github-prerelease.result == 'success' || needs.github-prerelease.result == 'skipped') &&
+      (needs.github-release.result == 'success' || needs.github-release.result == 'skipped') &&
+      needs.publish-to-pypi.result == 'success'
     permissions:
       contents: write
       id-token: write
