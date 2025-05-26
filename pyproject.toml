@@ -46,7 +46,7 @@ packages = [{include = "python_taxes", from = "src"}]
 optional = true
 
 [tool.poetry.group.cli.dependencies]
-typer = "^0.15.3"
+typer = "^0"
 
 [tool.poetry.group.dev]
 optional = true
@@ -80,6 +80,7 @@ static = [
 
 [tool.tox.env_run_base]
 description = "Run tests under {base_python}"
+set_env = { PYTHONPATH = "src" }
 package = "wheel"
 dependency_groups = ["tests"]
 commands = [
