@@ -1,46 +1,46 @@
-import subprocess
-
 import pytest
+from typer.testing import CliRunner
+
+from python_taxes.cli import app
+
+runner = CliRunner()
 
 
 @pytest.mark.parametrize(
-    "wages, expected",
+    "wages, exit_code, expected",
     [
-        (100, 1.45),
+        (100, 0, 1.45),
+        ("bad", 2, "Error"),
     ],
 )
-def test_med_cli(wages, expected):
-    process = subprocess.run(
-        ["poetry", "run", "pytax", "med", f"{wages}"], capture_output=True, text=True
-    )
-    assert process.returncode == 0
-    assert f"{expected}" in process.stdout
+def test_med_cli(wages, exit_code, expected):
+    result = runner.invoke(app, ["med", str(wages)], catch_exceptions=False)
+    assert result.exit_code == exit_code
+    assert f"{expected}" in result.output
 
 
 @pytest.mark.parametrize(
-    "wages, expected",
+    "wages, exit_code, expected",
     [
-        (100, 6.20),
+        (100, 0, 6.20),
+        ("1000 00", 2, "Error"),
     ],
 )
-def test_ss_cli(wages, expected):
-    process = subprocess.run(
-        ["poetry", "run", "pytax", "ss", f"{wages}"], capture_output=True, text=True
-    )
-    assert process.returncode == 0
-    assert f"{expected}" in process.stdout
+def test_ss_cli(wages, exit_code, expected):
+    result = runner.invoke(app, ["ss", str(wages)])
+    assert result.exit_code == exit_code
+    assert f"{expected}" in result.output
 
 
 @pytest.mark.parametrize(
-    "wages, expected",
+    "wages, exit_code, expected",
     [
-        (100, 0),
-        (3846.15, 532.35),
+        (100, 0, 0),
+        (3846.15, 0, 532.35),
+        (b"bad", 2, "Error"),
     ],
 )
-def test_income_cli(wages, expected):
-    process = subprocess.run(
-        ["poetry", "run", "pytax", "income", f"{wages}"], capture_output=True, text=True
-    )
-    assert process.returncode == 0
-    assert f"{expected}" in process.stdout
+def test_income_cli(wages, exit_code, expected):
+    result = runner.invoke(app, ["income", str(wages)])
+    assert result.exit_code == exit_code
+    assert f"{expected}" in result.output

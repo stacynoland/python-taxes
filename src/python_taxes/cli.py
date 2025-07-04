@@ -1,9 +1,9 @@
 import sys
-from decimal import Decimal
+from decimal import Decimal, InvalidOperation
 from enum import Enum
 from typing import Annotated
 
-from pydantic import StrictBool, validate_call
+from pydantic import StrictBool, ValidationError, validate_call
 
 from python_taxes import CURRENT_TAX_YEAR, currency_field
 from python_taxes.federal.income import employer_withholding as income_withholding
@@ -37,8 +37,19 @@ class FilingStatus(str, Enum):
 
 
 @validate_call
-def currency(value: Annotated[Decimal, currency_field]) -> Decimal:
+def _currency(value: Annotated[Decimal, currency_field]) -> Decimal:
     return value
+
+
+def currency(value) -> Decimal:
+    try:
+        ret_val = _currency(value)
+        return ret_val
+    except (InvalidOperation, ValidationError):
+        raise typer.BadParameter(
+            f"Invalid currency value: {value}. "
+            "Please enter a number with max 2 decimal places."
+        )
 
 
 @app.callback()
