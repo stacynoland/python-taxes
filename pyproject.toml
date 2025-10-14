@@ -3,7 +3,7 @@ name = "python-taxes"
 version = "0.6.0"
 description = "A Python library for calculating US Social Security, Medicare, and Federal Income taxes."
 authors = [
-    {name = "Stacy Noland", email = "stacy.noland@outlook.com"}
+    {name = "Stacy Noland", email = "46572585+stacynoland@users.noreply.github.com"}
 ]
 readme = "README.md"
 license = { file = "LICENSE" }
