@@ -46,8 +46,6 @@ build-backend = "poetry.core.masonry.api"
 [dependency-groups]
 test = [
     "pytest (>=8.4.2,<9.0.0)",
-    "pytest-cov (>=7.0.0,<8.0.0)",
-    "tox (>=4.31.0,<5.0.0)",
     "typer (>=0.19.2,<0.20.0)",
 ]
 lint = [
@@ -58,6 +56,10 @@ lint = [
 ]
 dev = [
     "pre-commit (>=4.3.0,<5.0.0)",
+    "tox (>=4.31.0,<5.0.0)",
+]
+coverage = [
+    "pytest-cov (>=7.0.0,<8.0.0)"
 ]
 
 [tool.poetry]
@@ -85,7 +87,7 @@ commands = [
 [tool.tox.env.testcov]
 description = "Run tests and coverage report"
 package = "wheel"
-dependency_groups = ["test"]
+dependency_groups = ["test", "coverage"]
 commands = [
     ["pytest", { replace = "posargs", default = ["--cov", "--cov-report", "term-missing"], extend = true }],
 ]
@@ -104,7 +106,7 @@ commands = [
 [tool.tox.env.check]
 description = "Check code base"
 package = "wheel"
-dependency_groups = ["lint"]
+dependency_groups = ["lint", "test"]
 commands = [
     ["black", { replace = "posargs", default = ["--check", "."], extend = true }],
     ["isort", { replace = "posargs", default = ["--check-only", "src", "tests"], extend = true }],
