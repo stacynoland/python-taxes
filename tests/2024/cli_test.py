@@ -41,6 +41,6 @@ def test_ss_cli(wages, exit_code, expected):
     ],
 )
 def test_income_cli(wages, exit_code, expected):
-    result = runner.invoke(app, ["income", str(wages)])
+    result = runner.invoke(app, ["income", str(wages), "--year", "2024"])
     assert result.exit_code == exit_code
     assert f"{expected}" in result.output

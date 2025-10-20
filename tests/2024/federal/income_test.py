@@ -58,6 +58,7 @@ def test_rounding_employer_withholding(wages, rounded, expected):
         income.employer_withholding(
             taxable_wages=wages,
             rounded=rounded,
+            tax_year=2024,
         )
         == expected
     )
@@ -91,6 +92,7 @@ def test_pay_frequency_employer_withholding(wages, pay_freq, expected):
         income.employer_withholding(
             taxable_wages=wages,
             pay_frequency=pay_freq,
+            tax_year=2024,
         )
         == expected
     )
@@ -125,6 +127,7 @@ def test_status_jobs_employer_withholding(
                 taxable_wages=wages,
                 filing_status=filing_status,
                 multiple_jobs=multiple_jobs,
+                tax_year=2024,
             )
             == expected
         )
@@ -133,6 +136,7 @@ def test_status_jobs_employer_withholding(
             income.employer_withholding(
                 taxable_wages=wages,
                 filing_status=filing_status,
+                tax_year=2024,
             )
             == expected
         )
@@ -153,6 +157,7 @@ def test_tax_credit_employer_withholding(wages, tax_credit, expected):
         income.employer_withholding(
             taxable_wages=wages,
             tax_credits=tax_credit,
+            tax_year=2024,
         )
         == expected
     )
@@ -173,6 +178,7 @@ def test_other_income_employer_withholding(wages, other_income, expected):
         income.employer_withholding(
             taxable_wages=wages,
             other_income=other_income,
+            tax_year=2024,
         )
         == expected
     )
@@ -193,6 +199,7 @@ def test_deductions_employer_withholding(wages, deductions, expected):
         income.employer_withholding(
             taxable_wages=wages,
             deductions=deductions,
+            tax_year=2024,
         )
         == expected
     )
@@ -213,6 +220,7 @@ def test_extra_employer_withholding(wages, extra_withhold, expected):
         income.employer_withholding(
             taxable_wages=wages,
             extra_withholding=extra_withhold,
+            tax_year=2024,
         )
         == expected
     )
@@ -245,6 +253,7 @@ def test_rounding_employer_withholding_pre2020(wages, rounded, expected):
         income.employer_withholding_pre_2020(
             taxable_wages=wages,
             rounded=rounded,
+            tax_year=2024,
         )
         == expected
     )
@@ -265,6 +274,7 @@ def test_status_employer_withholding_pre2020(wages, status, expected):
         income.employer_withholding_pre_2020(
             taxable_wages=wages,
             marital_status=status,
+            tax_year=2024,
         )
         == expected
     )
@@ -285,6 +295,7 @@ def test__employer_withholding_pre2020(wages, extra_withhold, expected):
         income.employer_withholding_pre_2020(
             taxable_wages=wages,
             extra_withholding=extra_withhold,
+            tax_year=2024,
         )
         == expected
     )
