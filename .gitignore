@@ -6,3 +6,6 @@ __pycache__
 
 # Per-user-configuration files
 .vscode/
+
+# MacOS specific files
+.DS_Store
