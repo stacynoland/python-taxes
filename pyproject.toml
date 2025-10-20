@@ -3,13 +3,12 @@ name = "python-taxes"
 version = "0.7.0"
 description = "A Python library for calculating US Social Security, Medicare, and Federal Income taxes."
 authors = [
-    {name = "Stacy Noland", email = "46572585+stacynoland@users.noreply.github.com"}
+    {name = "Stacy Noland",email = "46572585+stacynoland@users.noreply.github.com"}
 ]
 readme = "README.md"
-license = { file = "LICENSE" }
 requires-python = ">=3.10"
 dependencies = [
-    "pydantic (>=2.11.3,<3.0.0)"
+    "pydantic (>=2.12.3,<3.0.0)"
 ]
 classifiers = [
     "Development Status :: 4 - Beta",
@@ -30,7 +29,7 @@ classifiers = [
 ]
 
 [project.optional-dependencies]
-cli = ["typer (>=0.15.0,<1.0.0)"]
+cli = ["typer (>=0.19.2,<0.20.0)"]
 
 [project.scripts]
 pytax = "python_taxes.cli:app"
@@ -39,86 +38,30 @@ pytax = "python_taxes.cli:app"
 Homepage = "https://github.com/stacynoland/python-taxes"
 Source = "https://github.com/stacynoland/python-taxes"
 
-[tool.poetry]
-packages = [{include = "python_taxes", from = "src"}]
 
-[tool.poetry.group.cli]
-optional = true
-
-[tool.poetry.group.cli.dependencies]
-typer = "^0"
-
-[tool.poetry.group.dev]
-optional = true
-
-[tool.poetry.group.dev.dependencies]
-pytest = "^8.3.5"
-pytest-cov = "^6.1.1"
-black = "^25.1.0"
-flake8 = "^7.2.0"
-isort = "^6.0.1"
-mypy = "^1.15.0"
-tox = "^4.25.0"
-pre-commit = "^4.2.0"
-
-[tool.tox]
-requires = ["tox>=4.25.0,<5.0.0"]
-env_list = ["lint", "testcov"]
-labels = { tests = ["3.10", "3.11", "3.12", "3.13"] }
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
 
 [dependency-groups]
-tests = [
-    "pytest>=8.3.0,<9.0.0",
-    "typer>=0.15.0,<1.0.0",
+test = [
+    "pytest (>=8.4.2,<9.0.0)",
+    "pytest-cov (>=7.0.0,<8.0.0)",
+    "tox (>=4.31.0,<5.0.0)",
+    "typer (>=0.19.2,<0.20.0)",
 ]
-static = [
-    "black>=25.1.0,<26.0.0",
-    "isort>=6.0.0,<7.0.0",
-    "flake8>=7.2.0,<8.0.0",
-    "mypy>=1.15.0,<2.0.0",
+lint = [
+    "black (>=25.9.0,<26.0.0)",
+    "flake8 (>=7.3.0,<8.0.0)",
+    "isort (>=7.0.0,<8.0.0)",
+    "mypy (>=1.18.2,<2.0.0)"
 ]
-
-[tool.tox.env_run_base]
-description = "Run tests under {base_python}"
-set_env = { PYTHONPATH = "src" }
-package = "wheel"
-dependency_groups = ["tests"]
-commands = [
-    ["pytest", { replace = "posargs", default = ["tests"], extend = true }],
+dev = [
+    "pre-commit (>=4.3.0,<5.0.0)",
 ]
 
-[tool.tox.env.testcov]
-description = "Run tests and coverage report"
-package = "wheel"
-dependency_groups = ["tests"]
-deps = [
-    "pytest-cov>=6.1.0,<7.0.0",
-]
-commands = [
-    ["pytest", { replace = "posargs", default = ["--cov", "--cov-report", "term-missing"], extend = true }],
-]
-
-[tool.tox.env.lint]
-description = "Lint code base"
-package = "wheel"
-dependency_groups = ["static", "tests"]
-commands = [
-    ["black", { replace = "posargs", default = ["."], extend = true }],
-    ["isort", { replace = "posargs", default = ["src", "tests"], extend = true }],
-    ["flake8", { replace = "posargs", default = ["src", "tests"], extend = true }],
-    ["mypy", { replace = "posargs", default = ["src", "tests"], extend = true }],
-]
-
-[tool.tox.env.check]
-description = "Check code base"
-package = "wheel"
-dependency_groups = ["static", "tests"]
-commands = [
-    ["black", { replace = "posargs", default = ["--check", "."], extend = true }],
-    ["isort", { replace = "posargs", default = ["--check-only", "src", "tests"], extend = true }],
-    ["flake8", { replace = "posargs", default = ["src", "tests"], extend = true }],
-    ["mypy", { replace = "posargs", default = ["src", "tests"], extend = true }],
-]
+[tool.poetry]
+packages = [{include = "python_taxes", from = "src"}]
 
 [tool.isort]
 profile = "black"
@@ -126,6 +69,45 @@ skip_gitignore = true
 extend_skip = [".pytest_cache",]
 skip_glob = ["*/__pycache__/*", "tests/__pycache__/*"]
 
-[build-system]
-requires = ["poetry-core>=2.0.0,<3.0.0"]
-build-backend = "poetry.core.masonry.api"
+[tool.tox]
+env_list = ["lint", "testcov"]
+labels = { tests = ["3.10", "3.11", "3.12", "3.13"] }
+
+[tool.tox.env_run_base]
+description = "Run base tests under {base_python}"
+set_env = { PYTHONPATH = "src" }
+package = "wheel"
+dependency_groups = ["test"]
+commands = [
+    ["pytest", { replace = "posargs", default = ["tests"], extend = true }],
+]
+
+[tool.tox.env.testcov]
+description = "Run tests and coverage report"
+package = "wheel"
+dependency_groups = ["test"]
+commands = [
+    ["pytest", { replace = "posargs", default = ["--cov", "--cov-report", "term-missing"], extend = true }],
+]
+
+[tool.tox.env.lint]
+description = "Lint code base"
+package = "wheel"
+dependency_groups = ["lint"]
+commands = [
+    ["black", { replace = "posargs", default = ["."], extend = true }],
+    ["flake8", { replace = "posargs", default = ["src", "tests"], extend = true }],
+    ["isort", { replace = "posargs", default = ["src", "tests"], extend = true }],
+    ["mypy", { replace = "posargs", default = ["src", "tests"], extend = true }],
+]
+
+[tool.tox.env.check]
+description = "Check code base"
+package = "wheel"
+dependency_groups = ["lint"]
+commands = [
+    ["black", { replace = "posargs", default = ["--check", "."], extend = true }],
+    ["isort", { replace = "posargs", default = ["--check-only", "src", "tests"], extend = true }],
+    ["flake8", { replace = "posargs", default = ["src", "tests"], extend = true }],
+    ["mypy", { replace = "posargs", default = ["src", "tests"], extend = true }],
+]
